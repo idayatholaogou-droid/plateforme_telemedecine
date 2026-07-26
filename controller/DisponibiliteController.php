@@ -1,132 +1,95 @@
 <?php
 
-require_once __DIR__ . '/../config/Database.php';
+require_once __DIR__ . '/../models/DisponibiliteModel.php';
 
 /**
- * DisponibiliteModel
- * -------------------
- * Gere les creneaux de disponibilite des medecins.
+ * DisponibiliteController
+ * --------------------------
+ * Gere l'ajout et la suppression des creneaux de disponibilite
+ * d'un medecin. Reserve au role 'medecin'.
  */
 
-class DisponibiliteModel
+class DisponibiliteController
 {
-    private PDO $pdo;
+    private DisponibiliteModel $disponibiliteModel;
 
     public function __construct()
     {
-        $this->pdo = Database::getInstance();
+        if (session_status() === PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $this->disponibiliteModel = new DisponibiliteModel();
+
+        $this->verifierAcces();
     }
 
     /**
-     * Ajoute un creneau de disponibilite pour un medecin
+     * Seul un medecin connecte peut gerer ses disponibilites
      */
-    public function ajouterCreneau(int $idMedecin, string $jour, string $heureDebut, string $heureFin): int
+    private function verifierAcces(): void
     {
-        $stmt = $this->pdo->prepare(
-            "INSERT INTO disponibilite (id_medecin, jour, heure_debut, heure_fin, statut)
-             VALUES (:id_medecin, :jour, :heure_debut, :heure_fin, 'libre')
-             RETURNING id_dispo"
-        );
-
-        $stmt->execute([
-            'id_medecin'  => $idMedecin,
-            'jour'        => $jour,
-            'heure_debut' => $heureDebut,
-            'heure_fin'   => $heureFin,
-        ]);
-
-        return $stmt->fetchColumn();
+        if (empty($_SESSION['id_utilisateur']) || $_SESSION['role'] !== 'medecin') {
+            header('Location: /connexion');
+            exit;
+        }
     }
 
     /**
-     * Supprime un creneau (uniquement si encore libre, non reserve)
+     * Affiche la liste des creneaux du medecin connecte (avec formulaire d'ajout)
      */
-    public function supprimerCreneau(int $idDispo, int $idMedecin): bool
+    public function afficherListe(): void
     {
-        $stmt = $this->pdo->prepare(
-            "DELETE FROM disponibilite
-             WHERE id_dispo = :id_dispo AND id_medecin = :id_medecin AND statut = 'libre'"
-        );
+        $idMedecin = $_SESSION['id_utilisateur'];
+        $creneaux = $this->disponibiliteModel->getCreneauxParMedecin($idMedecin);
 
-        $stmt->execute([
-            'id_dispo'   => $idDispo,
-            'id_medecin' => $idMedecin,
-        ]);
-
-        return $stmt->rowCount() > 0;
+        require __DIR__ . '/../views/medecin/disponibilites.php';
     }
 
     /**
-     * Liste tous les creneaux d'un medecin (libres et reserves)
+     * Traite l'ajout d'un nouveau creneau
      */
-    public function getCreneauxParMedecin(int $idMedecin): array
+    public function ajouter(): void
     {
-        $stmt = $this->pdo->prepare(
-            "SELECT id_dispo, jour, heure_debut, heure_fin, statut
-             FROM disponibilite
-             WHERE id_medecin = :id_medecin
-             ORDER BY jour, heure_debut"
-        );
-        $stmt->execute(['id_medecin' => $idMedecin]);
+        $idMedecin = $_SESSION['id_utilisateur'];
+        $jour = $_POST['jour'] ?? '';
+        $heureDebut = $_POST['heure_debut'] ?? '';
+        $heureFin = $_POST['heure_fin'] ?? '';
 
-        return $stmt->fetchAll();
+        if ($jour === '' || $heureDebut === '' || $heureFin === '') {
+            header('Location: /medecin/disponibilites?erreur=champs_manquants');
+            exit;
+        }
+
+        if ($heureFin <= $heureDebut) {
+            header('Location: /medecin/disponibilites?erreur=heure_invalide');
+            exit;
+        }
+
+        $this->disponibiliteModel->ajouterCreneau($idMedecin, $jour, $heureDebut, $heureFin);
+
+        header('Location: /medecin/disponibilites');
+        exit;
     }
 
     /**
-     * Liste uniquement les creneaux libres d'un medecin (pour la prise de RDV)
+     * Traite la suppression d'un creneau (uniquement s'il est encore libre)
      */
-    public function getCreneauxLibres(int $idMedecin): array
+    public function supprimer(): void
     {
-        $stmt = $this->pdo->prepare(
-            "SELECT id_dispo, jour, heure_debut, heure_fin
-             FROM disponibilite
-             WHERE id_medecin = :id_medecin AND statut = 'libre' AND jour >= CURRENT_DATE
-             ORDER BY jour, heure_debut"
-        );
-        $stmt->execute(['id_medecin' => $idMedecin]);
+        $idMedecin = $_SESSION['id_utilisateur'];
+        $idDispo = (int) ($_POST['id_dispo'] ?? 0);
 
-        return $stmt->fetchAll();
-    }
+        if ($idDispo > 0) {
+            $supprime = $this->disponibiliteModel->supprimerCreneau($idDispo, $idMedecin);
 
-    /**
-     * Recupere un creneau precis (pour verification avant reservation)
-     */
-    public function trouverParId(int $idDispo): array|false
-    {
-        $stmt = $this->pdo->prepare(
-            "SELECT id_dispo, id_medecin, jour, heure_debut, heure_fin, statut
-             FROM disponibilite
-             WHERE id_dispo = :id"
-        );
-        $stmt->execute(['id' => $idDispo]);
+            if (!$supprime) {
+                header('Location: /medecin/disponibilites?erreur=creneau_reserve');
+                exit;
+            }
+        }
 
-        return $stmt->fetch();
-    }
-
-    /**
-     * Marque un creneau comme reserve (appele lors de la creation d'un RDV)
-     */
-    public function marquerReserve(int $idDispo): bool
-    {
-        $stmt = $this->pdo->prepare(
-            "UPDATE disponibilite SET statut = 'reserve'
-             WHERE id_dispo = :id AND statut = 'libre'"
-        );
-        $stmt->execute(['id' => $idDispo]);
-
-        return $stmt->rowCount() > 0;
-    }
-
-    /**
-     * Remet un creneau en 'libre' (appele lors de l'annulation d'un RDV)
-     */
-    public function libererCreneau(int $idDispo): bool
-    {
-        $stmt = $this->pdo->prepare(
-            "UPDATE disponibilite SET statut = 'libre' WHERE id_dispo = :id"
-        );
-        $stmt->execute(['id' => $idDispo]);
-
-        return $stmt->rowCount() > 0;
+        header('Location: /medecin/disponibilites');
+        exit;
     }
 }
