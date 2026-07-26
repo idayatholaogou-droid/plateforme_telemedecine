@@ -9,6 +9,12 @@
         </div>
     <?php endif; ?>
 
+    <?php if (!empty($messageSucces)): ?>
+        <div class="alerte alerte-succes">
+            <?= htmlspecialchars($messageSucces) ?>
+        </div>
+    <?php endif; ?>
+
     <form action="/connexion" method="POST">
         <div class="form-group">
             <label for="email">Email</label>

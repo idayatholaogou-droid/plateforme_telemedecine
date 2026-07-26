@@ -13,6 +13,13 @@ require_once __DIR__ . '/../controllers/AdministrateurController.php';
 require_once __DIR__ . '/../controllers/PatientController.php';
 require_once __DIR__ . '/../controllers/MedecinController.php';
 require_once __DIR__ . '/../controllers/RendezVousController.php';
+require_once __DIR__ . '/../controllers/ConsultationController.php';
+require_once __DIR__ . '/../controllers/OrdonnanceController.php';
+require_once __DIR__ . '/../controllers/DocumentController.php';
+require_once __DIR__ . '/../controllers/MessageController.php';
+require_once __DIR__ . '/../controllers/NotificationController.php';
+require_once __DIR__ . '/../controllers/SpecialiteController.php';
+require_once __DIR__ . '/../controllers/DisponibiliteController.php';
 
 // Recupere l'URL demandee, sans les parametres GET (?...)
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
@@ -24,10 +31,13 @@ $routes = [
         '/'                            => ['AuthController', 'afficherConnexion'],
         '/connexion'                   => ['AuthController', 'afficherConnexion'],
         '/inscription/patient'         => ['AuthController', 'afficherInscriptionPatient'],
+        '/inscription/medecin'         => ['AuthController', 'afficherInscriptionMedecin'],
         '/deconnexion'                 => ['AuthController', 'seDeconnecter'],
         '/admin/tableau-bord'          => ['AdministrateurController', 'tableauBord'],
         '/admin/medecins-en-attente'   => ['AdministrateurController', 'listeMedecinsEnAttente'],
         '/admin/utilisateurs'          => ['AdministrateurController', 'listeUtilisateurs'],
+        '/admin/patients'              => ['AdministrateurController', 'listePatients'],
+        '/admin/statistiques'          => ['AdministrateurController', 'statistiques'],
         '/patient/tableau-bord'        => ['PatientController', 'tableauBord'],
         '/patient/profil'              => ['PatientController', 'afficherProfil'],
         '/patient/rechercher-medecin'  => ['PatientController', 'rechercherMedecin'],
@@ -36,10 +46,23 @@ $routes = [
         '/medecin/dossier-patient'     => ['MedecinController', 'consulterDossierPatient'],
         '/rendezvous/prendre'          => ['RendezVousController', 'afficherPrendre'],
         '/rendezvous/liste'            => ['RendezVousController', 'liste'],
+        '/consultation/creer'          => ['ConsultationController', 'afficherCreer'],
+        '/consultation/detail'         => ['ConsultationController', 'detail'],
+        '/patient/historique'          => ['ConsultationController', 'historiquePatient'],
+        '/ordonnance/creer'            => ['OrdonnanceController', 'afficherCreer'],
+        '/ordonnance/detail'           => ['OrdonnanceController', 'detail'],
+        '/patient/documents'           => ['DocumentController', 'afficherListe'],
+        '/document/telecharger'        => ['DocumentController', 'telecharger'],
+        '/message/conversation'        => ['MessageController', 'afficherConversation'],
+        '/message/liste'               => ['MessageController', 'listeConversations'],
+        '/notification/liste'          => ['NotificationController', 'afficherListe'],
+        '/admin/specialites'           => ['SpecialiteController', 'afficherListe'],
+        '/medecin/disponibilites'      => ['DisponibiliteController', 'afficherListe'],
     ],
     'POST' => [
         '/connexion'                    => ['AuthController', 'seConnecter'],
         '/inscription/patient'          => ['AuthController', 'inscrirePatient'],
+        '/inscription/medecin'          => ['AuthController', 'inscrireMedecin'],
         '/admin/valider-medecin'        => ['AdministrateurController', 'validerMedecin'],
         '/admin/rejeter-medecin'        => ['AdministrateurController', 'rejeterMedecin'],
         '/admin/supprimer-utilisateur'  => ['AdministrateurController', 'supprimerUtilisateur'],
@@ -48,6 +71,17 @@ $routes = [
         '/rendezvous/prendre'           => ['RendezVousController', 'prendre'],
         '/rendezvous/annuler'           => ['RendezVousController', 'annuler'],
         '/rendezvous/confirmer'         => ['RendezVousController', 'confirmer'],
+        '/consultation/creer'           => ['ConsultationController', 'creer'],
+        '/ordonnance/creer'             => ['OrdonnanceController', 'creer'],
+        '/patient/documents/upload'     => ['DocumentController', 'uploader'],
+        '/document/supprimer'           => ['DocumentController', 'supprimer'],
+        '/message/envoyer'              => ['MessageController', 'envoyer'],
+        '/notification/marquer-lue'     => ['NotificationController', 'marquerLue'],
+        '/admin/specialites/ajouter'    => ['SpecialiteController', 'ajouter'],
+        '/admin/specialites/modifier'   => ['SpecialiteController', 'modifier'],
+        '/admin/specialites/supprimer'  => ['SpecialiteController', 'supprimer'],
+        '/medecin/disponibilites/ajouter'   => ['DisponibiliteController', 'ajouter'],
+        '/medecin/disponibilites/supprimer' => ['DisponibiliteController', 'supprimer'],
     ],
 ];
 

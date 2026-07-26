@@ -1,6 +1,8 @@
 <?php
 
 require_once __DIR__ . '/../models/PatientModel.php';
+require_once __DIR__ . '/../models/MedecinModel.php';
+require_once __DIR__ . '/../models/SpecialiteModel.php';
 require_once __DIR__ . '/../models/UtilisateurModel.php';
 
 /**
@@ -14,6 +16,8 @@ class AuthController
 {
     private UtilisateurModel $utilisateurModel;
     private PatientModel $patientModel;
+    private MedecinModel $medecinModel;
+    private SpecialiteModel $specialiteModel;
 
     public function __construct()
     {
@@ -23,6 +27,8 @@ class AuthController
 
         $this->utilisateurModel = new UtilisateurModel();
         $this->patientModel = new PatientModel();
+        $this->medecinModel = new MedecinModel();
+        $this->specialiteModel = new SpecialiteModel();
     }
 
     /**
@@ -128,6 +134,57 @@ class AuthController
 
         header('Location: /patient/tableau-bord');
         exit;
+    }
+
+    /**
+     * Affiche le formulaire d'inscription medecin
+     */
+    public function afficherInscriptionMedecin(): void
+    {
+        $specialites = $this->specialiteModel->getToutes();
+
+        require __DIR__ . '/../views/auth/inscriptionMedecin.php';
+    }
+
+    /**
+     * Traite l'inscription d'un medecin (statut 'en_attente' par defaut,
+     * doit etre valide par un administrateur avant de recevoir des RDV)
+     */
+    public function inscrireMedecin(): void
+    {
+        $donnees = [
+            'nom'            => trim($_POST['nom'] ?? ''),
+            'prenom'         => trim($_POST['prenom'] ?? ''),
+            'email'          => trim($_POST['email'] ?? ''),
+            'mot_de_passe'   => $_POST['mot_de_passe'] ?? '',
+            'telephone'      => trim($_POST['telephone'] ?? ''),
+            'numero_licence' => trim($_POST['numero_licence'] ?? ''),
+            'biographie'     => trim($_POST['biographie'] ?? ''),
+            'specialites'    => array_map('intval', $_POST['specialites'] ?? []),
+        ];
+
+        $specialites = $this->specialiteModel->getToutes();
+
+        if ($donnees['nom'] === '' || $donnees['prenom'] === '' ||
+            $donnees['email'] === '' || $donnees['mot_de_passe'] === '' ||
+            $donnees['numero_licence'] === '') {
+            $erreur = "Veuillez remplir tous les champs obligatoires.";
+            require __DIR__ . '/../views/auth/inscriptionMedecin.php';
+            return;
+        }
+
+        if ($this->utilisateurModel->emailExiste($donnees['email'])) {
+            $erreur = "Cet email est deja utilise.";
+            require __DIR__ . '/../views/auth/inscriptionMedecin.php';
+            return;
+        }
+
+        $this->medecinModel->inscrire($donnees);
+
+        // Pas de connexion automatique : le compte doit d'abord etre valide
+        // par un administrateur avant de pouvoir se connecter utilement
+        $messageSucces = "Votre inscription a bien ete enregistree. Votre compte doit etre valide par un administrateur avant que vous puissiez recevoir des rendez-vous.";
+        require __DIR__ . '/../views/auth/connexion.php';
     }
 
     /**

@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/AdministrateurModel.php';
 require_once __DIR__ . '/../models/MedecinModel.php';
+require_once __DIR__ . '/../models/PatientModel.php';
 
 /**
  * AdministrateurController
@@ -15,6 +16,7 @@ class AdministrateurController
 {
     private AdministrateurModel $administrateurModel;
     private MedecinModel $medecinModel;
+    private PatientModel $patientModel;
 
     public function __construct()
     {
@@ -24,6 +26,7 @@ class AdministrateurController
 
         $this->administrateurModel = new AdministrateurModel();
         $this->medecinModel = new MedecinModel();
+        $this->patientModel = new PatientModel();
 
         $this->verifierAcces();
     }
@@ -89,6 +92,16 @@ class AdministrateurController
 
         header('Location: /admin/medecins-en-attente');
         exit;
+    }
+
+    /**
+     * Liste tous les patients de la plateforme
+     */
+    public function listePatients(): void
+    {
+        $patients = $this->patientModel->getAll();
+
+        require __DIR__ . '/../views/admin/liste_patients.php';
     }
 
     /**

@@ -166,7 +166,7 @@ class RendezVousModel
     public function getParMedecin(int $idMedecin): array
     {
         $stmt = $this->pdo->prepare(
-            "SELECT rv.id_rdv, rv.date_rdv, rv.motif, rv.statut,
+            "SELECT rv.id_rdv, rv.id_patient, rv.date_rdv, rv.motif, rv.statut,
                     u.nom AS nom_patient, u.prenom AS prenom_patient,
                     d.heure_debut, d.heure_fin
              FROM rendez_vous rv

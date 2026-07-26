@@ -168,4 +168,21 @@ class MedecinModel extends UtilisateurModel
 
         return $stmt->execute(['id' => $idMedecin]);
     }
+
+    /**
+     * Met a jour les infos specifiques au medecin (telephone, biographie)
+     */
+    public function modifierInfosMedecin(int $idMedecin, string $telephone, string $biographie): bool
+    {
+        $stmt = $this->pdo->prepare(
+            "UPDATE medecin SET telephone = :telephone, biographie = :biographie
+             WHERE id_utilisateur = :id"
+        );
+
+        return $stmt->execute([
+            'telephone'  => $telephone,
+            'biographie' => $biographie,
+            'id'         => $idMedecin,
+        ]);
+    }
 }

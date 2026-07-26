@@ -2,6 +2,7 @@
 
 require_once __DIR__ . '/../models/MedecinModel.php';
 require_once __DIR__ . '/../models/PatientModel.php';
+require_once __DIR__ . '/../models/RendezVousModel.php';
 
 /**
  * MedecinController
@@ -15,6 +16,7 @@ class MedecinController
 {
     private MedecinModel $medecinModel;
     private PatientModel $patientModel;
+    private RendezVousModel $rendezVousModel;
 
     public function __construct()
     {
@@ -24,6 +26,7 @@ class MedecinController
 
         $this->medecinModel = new MedecinModel();
         $this->patientModel = new PatientModel();
+        $this->rendezVousModel = new RendezVousModel();
 
         $this->verifierAcces();
     }
@@ -61,7 +64,7 @@ class MedecinController
     }
 
     /**
-     * Traite la modification du profil (infos communes uniquement pour l'instant)
+     * Traite la modification du profil (infos communes + infos medecin)
      */
     public function modifierProfil(): void
     {
@@ -72,8 +75,11 @@ class MedecinController
             'prenom' => trim($_POST['prenom'] ?? ''),
         ]);
 
-        // Infos specifiques (biographie, telephone) : a completer si tu
-        // ajoutes une methode modifierInfosMedecin() dans MedecinModel
+        $this->medecinModel->modifierInfosMedecin(
+            $idUtilisateur,
+            trim($_POST['telephone'] ?? ''),
+            trim($_POST['biographie'] ?? '')
+        );
 
         header('Location: /medecin/profil');
         exit;
@@ -81,16 +87,23 @@ class MedecinController
 
     /**
      * Consulte le dossier complet d'un patient
-     * Accessible uniquement si le medecin a (ou a eu) un rendez-vous avec lui,
-     * a verifier via RendezVousModel une fois cree
+     * Accessible uniquement si le medecin a (ou a eu) un rendez-vous avec lui
      */
     public function consulterDossierPatient(): void
     {
         $idPatient = (int) ($_GET['id'] ?? 0);
+        $idMedecin = $_SESSION['id_utilisateur'];
 
         if ($idPatient <= 0) {
             http_response_code(404);
             echo "Patient introuvable.";
+            return;
+        }
+
+        // Verification d'acces : ce medecin a-t-il deja eu un RDV avec ce patient ?
+        if (!$this->rendezVousModel->medecinAAccesPatient($idMedecin, $idPatient)) {
+            http_response_code(403);
+            require __DIR__ . '/../views/errors/403.php';
             return;
         }
 
