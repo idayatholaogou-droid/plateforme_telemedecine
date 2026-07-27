@@ -9,7 +9,10 @@
 <body>
 
 <header class="site-header">
-    <a href="/" class="logo">Telemedecine</a>
+    <a href="/" class="logo">
+        <img src="/assets/images/logo.svg" alt="Logo Telemedecine" width="32" height="32">
+        Telemedecine
+    </a>
     <nav>
         <?php if (!empty($_SESSION['id_utilisateur'])): ?>
             <span>Bonjour, <?= htmlspecialchars($_SESSION['prenom']) ?></span>

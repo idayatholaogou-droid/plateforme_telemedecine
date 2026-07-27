@@ -20,7 +20,7 @@ class Database
     private const HOST    = 'localhost';
     private const PORT    = '5433';
     private const DBNAME  = 'telemedecine';
-    private const USER    = 'ton_utilisateur_postgres';
+    private const USER    = 'postgres';
     private const PASS    = '1412';
 
     // Constructeur prive : empeche "new Database()" depuis l'exterieur
