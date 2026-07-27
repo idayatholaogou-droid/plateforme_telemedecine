@@ -129,6 +129,34 @@ class RendezVousController
     }
 
     /**
+     * Affiche le detail d'un rendez-vous precis
+     * (accessible au patient et au medecin concernes uniquement)
+     */
+    public function detail(): void
+    {
+        $idRdv = (int) ($_GET['id'] ?? 0);
+        $rdv = $this->rendezVousModel->trouverDetailComplet($idRdv);
+
+        if (!$rdv) {
+            http_response_code(404);
+            echo "Rendez-vous introuvable.";
+            return;
+        }
+
+        $idUtilisateur = $_SESSION['id_utilisateur'];
+        $estLePatient = (int) $rdv['id_patient'] === $idUtilisateur;
+        $estLeMedecin = (int) $rdv['id_medecin'] === $idUtilisateur;
+
+        if (!$estLePatient && !$estLeMedecin) {
+            http_response_code(403);
+            require __DIR__ . '/../views/errors/403.php';
+            return;
+        }
+
+        require __DIR__ . '/../views/rendezvous/detail.php';
+    }
+
+    /**
      * Confirme un rendez-vous (action reservee au medecin)
      */
     public function confirmer(): void

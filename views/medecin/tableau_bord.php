@@ -16,9 +16,14 @@
             <p>Gerez vos creneaux de consultation.</p>
         </a>
 
-        <a href="/rendezvous/liste" class="dashboard-card">
+        <a href="/medecin/planning" class="dashboard-card">
             <h3>Mon planning</h3>
             <p>Consultez et confirmez vos rendez-vous.</p>
+        </a>
+
+        <a href="/medecin/consultation" class="dashboard-card">
+            <h3>Consultations a rediger</h3>
+            <p>Rendez-vous confirmes en attente de compte-rendu.</p>
         </a>
 
         <a href="/message/liste" class="dashboard-card">

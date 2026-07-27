@@ -46,6 +46,7 @@ $routes = [
         '/medecin/dossier-patient'     => ['MedecinController', 'consulterDossierPatient'],
         '/rendezvous/prendre'          => ['RendezVousController', 'afficherPrendre'],
         '/rendezvous/liste'            => ['RendezVousController', 'liste'],
+        '/rendezvous/detail'           => ['RendezVousController', 'detail'],
         '/consultation/creer'          => ['ConsultationController', 'afficherCreer'],
         '/consultation/detail'         => ['ConsultationController', 'detail'],
         '/patient/historique'          => ['ConsultationController', 'historiquePatient'],
@@ -94,6 +95,5 @@ if (isset($routes[$methode][$uri])) {
 } else {
     // Aucune route trouvee : page 404
     http_response_code(404);
-    echo "Page non trouvee.";
-    // Plus tard : require __DIR__ . '/../views/errors/404.php';
+    require __DIR__ . '/../views/errors/404.php';
 }
