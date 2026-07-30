@@ -64,7 +64,7 @@ class RendezVousController
 
         $creneaux = $this->disponibiliteModel->getCreneauxLibres($idMedecin);
 
-        require __DIR__ . '/../views/rendezvous/prendre.php';
+        require __DIR__ . '/../views/rendezVous/prendre.php';
     }
 
     /**
@@ -110,7 +110,7 @@ class RendezVousController
             $rendezVous = [];
         }
 
-        require __DIR__ . '/../views/rendezvous/liste.php';
+        require __DIR__ . '/../views/rendezVous/liste.php';
     }
 
     /**
@@ -153,7 +153,7 @@ class RendezVousController
             return;
         }
 
-        require __DIR__ . '/../views/rendezvous/detail.php';
+        require __DIR__ . '/../views/rendezVous/detail.php';
     }
 
     /**
