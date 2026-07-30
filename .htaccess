@@ -6,3 +6,5 @@ RewriteCond %{REQUEST_FILENAME} !-d
 
 # Redirige tout vers index.php, qui se charge du routage
 RewriteRule ^ index.php [QSA,L]
+Options -Indexes
+Require all denied
