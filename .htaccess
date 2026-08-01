@@ -1,10 +1,2 @@
-RewriteEngine On
-
-# Si le fichier ou dossier demande n'existe pas physiquement (assets exclus)
-RewriteCond %{REQUEST_FILENAME} !-f
-RewriteCond %{REQUEST_FILENAME} !-d
-
-# Redirige tout vers index.php, qui se charge du routage
-RewriteRule ^ index.php [QSA,L]
 Options -Indexes
 Require all denied

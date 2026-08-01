@@ -34,7 +34,7 @@ class MessageController
     }
 
     /**
-     * Verifie que l'utilisateur connecte fait bien partie de cette conversation
+     * Verifie que l'utilisateur connecté fait bien partie de cette conversation
      */
     private function verifierParticipant(array $conversation): bool
     {

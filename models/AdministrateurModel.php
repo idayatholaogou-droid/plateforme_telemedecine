@@ -139,3 +139,4 @@ class AdministrateurModel extends UtilisateurModel
         return $stmt->fetch();
     }
 }
+  

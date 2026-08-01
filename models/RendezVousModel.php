@@ -141,6 +141,28 @@ class RendezVousModel
     }
 
     /**
+     * Recupere un rendez-vous avec toutes les infos utiles a l'affichage
+     * (nom du patient, nom du medecin, horaires)
+     */
+    public function trouverDetailComplet(int $idRdv): array|false
+    {
+        $stmt = $this->pdo->prepare(
+            "SELECT rv.id_rdv, rv.date_rdv, rv.motif, rv.statut, rv.id_patient, rv.id_medecin,
+                    up.nom AS nom_patient, up.prenom AS prenom_patient,
+                    um.nom AS nom_medecin, um.prenom AS prenom_medecin,
+                    d.heure_debut, d.heure_fin
+             FROM rendez_vous rv
+             JOIN utilisateur up ON up.id_utilisateur = rv.id_patient
+             JOIN utilisateur um ON um.id_utilisateur = rv.id_medecin
+             JOIN disponibilite d ON d.id_dispo = rv.id_dispo
+             WHERE rv.id_rdv = :id"
+        );
+        $stmt->execute(['id' => $idRdv]);
+
+        return $stmt->fetch();
+    }
+
+    /**
      * Liste les rendez-vous d'un patient (avec infos du medecin)
      */
     public function getParPatient(int $idPatient): array

@@ -41,4 +41,5 @@
     <a href="/patient/rechercher-medecin" class="lien-retour">&larr; Retour a la recherche</a>
 </div>
 
+<script src="/assets/js/rendezVous.js"></script>
 <?php require __DIR__ . '/../partials/footer.php'; ?>

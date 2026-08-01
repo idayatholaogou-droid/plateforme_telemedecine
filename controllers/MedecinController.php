@@ -54,6 +54,36 @@ class MedecinController
     }
 
     /**
+     * Planning du medecin : ses rendez-vous confirmes ou en attente,
+     * groupes par date pour une vue calendrier simplifiee
+     */
+    public function planning(): void
+    {
+        $idMedecin = $_SESSION['id_utilisateur'];
+        $rendezVous = $this->rendezVousModel->getParMedecin($idMedecin);
+
+        require __DIR__ . '/../views/medecin/planning.php';
+    }
+
+    /**
+     * Liste les rendez-vous confirmes en attente de consultation
+     * (point de depart pour le medecin avant de rediger une consultation)
+     */
+    public function listeAConsulter(): void
+    {
+        $idMedecin = $_SESSION['id_utilisateur'];
+        $tousLesRdv = $this->rendezVousModel->getParMedecin($idMedecin);
+
+        // Ne garde que les rendez-vous confirmes (pas encore consultes)
+        $rendezVousAConsulter = array_filter(
+            $tousLesRdv,
+            fn($rdv) => $rdv['statut'] === 'confirme'
+        );
+
+        require __DIR__ . '/../views/medecin/consultation.php';
+    }
+
+    /**
      * Affiche le profil du medecin
      */
     public function afficherProfil(): void
