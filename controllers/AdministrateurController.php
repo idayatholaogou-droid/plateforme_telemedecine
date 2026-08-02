@@ -105,6 +105,16 @@ class AdministrateurController
     }
 
     /**
+     * Affiche la page dediee aux statistiques detaillees
+     */
+    public function statistiques(): void
+    {
+        $statistiques = $this->administrateurModel->getStatistiques();
+
+        require __DIR__ . '/../views/admin/statistiques.php';
+    }
+
+    /**
      * Liste tous les utilisateurs de la plateforme
      */
     public function listeUtilisateurs(): void
