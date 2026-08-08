@@ -2,12 +2,7 @@
 
 require_once __DIR__ . '/../config/Database.php';
 
-/**
- * OrdonnanceModel
- * -----------------
- * Gere la creation d'ordonnances et de leurs lignes de medicaments
- * (table ligne_ordonnance geree directement ici, pas de modele separe).
- */
+
 
 class OrdonnanceModel
 {
@@ -18,15 +13,7 @@ class OrdonnanceModel
         $this->pdo = Database::getInstance();
     }
 
-    /**
-     * Cree une ordonnance avec ses lignes de medicaments, en transaction.
-     *
-     * $medicaments est un tableau de tableaux :
-     * [
-     *   ['nom' => 'Paracetamol', 'posologie' => '1 cp matin et soir', 'duree' => 5, 'quantite' => 1],
-     *   ...
-     * ]
-     */
+    
     public function creer(int $idConsultation, array $medicaments): int|false
     {
         try {
@@ -64,9 +51,7 @@ class OrdonnanceModel
         }
     }
 
-    /**
-     * Recupere une ordonnance avec toutes ses lignes de medicaments
-     */
+    
     public function trouverParId(int $idOrdonnance): array|false
     {
         $stmtOrdo = $this->pdo->prepare(
@@ -99,9 +84,7 @@ class OrdonnanceModel
         return $ordonnance;
     }
 
-    /**
-     * Liste les ordonnances liees a une consultation (generalement 0 ou 1)
-     */
+    
     public function getParConsultation(int $idConsultation): array
     {
         $stmt = $this->pdo->prepare(
@@ -114,9 +97,7 @@ class OrdonnanceModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Toutes les ordonnances d'un patient (le plus recent d'abord)
-     */
+    
     public function getParPatient(int $idPatient): array
     {
         $stmt = $this->pdo->prepare(

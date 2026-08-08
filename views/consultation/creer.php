@@ -8,7 +8,7 @@
         <input type="hidden" name="id_rdv" value="<?= $rdv['id_rdv'] ?>">
 
         <div class="form-group">
-            <label for="symptomes">Symptomes rapportes</label>
+            <label for="symptomes">Symptômes rapportés</label>
             <textarea id="symptomes" name="symptomes" rows="3" required></textarea>
         </div>
 
@@ -18,7 +18,7 @@
         </div>
 
         <div class="form-group">
-            <label for="notes">Notes complementaires</label>
+            <label for="notes">Notes complémentaires</label>
             <textarea id="notes" name="notes" rows="2"></textarea>
         </div>
 

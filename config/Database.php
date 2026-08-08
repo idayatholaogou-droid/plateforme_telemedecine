@@ -13,30 +13,23 @@
 
 class Database
 {
-    // Contient l'unique instance PDO de l'application
+
     private static ?PDO $instance = null;
 
-    // Parametres de connexion (a adapter selon ton environnement)
     private const HOST    = 'localhost';
     private const PORT    = '5433';
     private const DBNAME  = 'telemedecine';
     private const USER    = 'postgres';
     private const PASS    = '1412';
 
-    // Constructeur prive : empeche "new Database()" depuis l'exterieur
     private function __construct()
     {
     }
 
-    // Empeche aussi le clonage de l'instance
     private function __clone()
     {
     }
 
-    /**
-     * Retourne l'unique instance PDO.
-     * La cree seulement lors du premier appel, puis la reutilise.
-     */
     public static function getInstance(): PDO
     {
         if (self::$instance === null) {
@@ -59,7 +52,6 @@ class Database
                     ]
                 );
             } catch (PDOException $e) {
-                // En production : logger l'erreur plutot que l'afficher
                 die('Erreur de connexion a la base de donnees : ' . $e->getMessage());
             }
         }

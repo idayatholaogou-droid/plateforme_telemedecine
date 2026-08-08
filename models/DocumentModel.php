@@ -2,12 +2,7 @@
 
 require_once __DIR__ . '/../config/Database.php';
 
-/**
- * DocumentModel
- * ---------------
- * Gere les documents lies a un patient (ordonnances scannees,
- * resultats d'analyses, certificats...).
- */
+
 
 class DocumentModel
 {
@@ -18,10 +13,7 @@ class DocumentModel
         $this->pdo = Database::getInstance();
     }
 
-    /**
-     * Enregistre un document en base (le fichier physique est deja stocke
-     * sur le disque par le controleur avant l'appel a cette methode)
-     */
+    
     public function ajouter(int $idPatient, string $type, string $cheminFichier, ?int $idConsultation = null): int
     {
         $stmt = $this->pdo->prepare(
@@ -40,9 +32,7 @@ class DocumentModel
         return $stmt->fetchColumn();
     }
 
-    /**
-     * Recupere un document par son id
-     */
+    
     public function trouverParId(int $idDocument): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -55,9 +45,7 @@ class DocumentModel
         return $stmt->fetch();
     }
 
-    /**
-     * Liste tous les documents d'un patient (le plus recent d'abord)
-     */
+   
     public function getParPatient(int $idPatient): array
     {
         $stmt = $this->pdo->prepare(
@@ -71,9 +59,7 @@ class DocumentModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Supprime un document (verifie que le patient en est bien le proprietaire)
-     */
+    
     public function supprimer(int $idDocument, int $idPatient): bool
     {
         $stmt = $this->pdo->prepare(

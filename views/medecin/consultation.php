@@ -1,11 +1,11 @@
 <?php require __DIR__ . '/../partials/header.php'; ?>
 
 <div class="medecin-container">
-    <h1>Rendez-vous a consulter</h1>
-    <p>Rendez-vous confirmes pour lesquels vous pouvez rediger une consultation.</p>
+    <h1>Rendez-vous à consulter</h1>
+    <p>Rendez-vous confirmés pour lesquels vous pouvez rédiger une consultation.</p>
 
     <?php if (empty($rendezVousAConsulter)): ?>
-        <p>Aucun rendez-vous confirme en attente de consultation.</p>
+        <p>Aucun rendez-vous confirmé en attente de consultation.</p>
     <?php else: ?>
         <table class="table-admin">
             <thead>

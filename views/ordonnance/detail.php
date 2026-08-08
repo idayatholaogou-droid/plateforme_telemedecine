@@ -11,10 +11,10 @@
     <table class="table-admin">
         <thead>
             <tr>
-                <th>Medicament</th>
+                <th>Médicament</th>
                 <th>Posologie</th>
-                <th>Duree</th>
-                <th>Quantite</th>
+                <th>Durée</th>
+                <th>Quantité</th>
             </tr>
         </thead>
         <tbody>
@@ -23,7 +23,7 @@
                     <td><?= htmlspecialchars($medicament['nom_medicament']) ?></td>
                     <td><?= htmlspecialchars($medicament['posologie']) ?></td>
                     <td><?= $medicament['duree'] ? htmlspecialchars($medicament['duree']) . ' jours' : '-' ?></td>
-                    <td><?= htmlspecialchars($medicament['quantite']) ?></td>
+                    <td><?= htmlspecialchars($medicament['quantité']) ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>

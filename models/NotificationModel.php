@@ -2,12 +2,7 @@
 
 require_once __DIR__ . '/../config/Database.php';
 
-/**
- * NotificationModel
- * --------------------
- * Gere les notifications envoyees aux utilisateurs (patient, medecin, admin).
- * Grace a la table mere "utilisateur", id_utilisateur suffit quel que soit le role.
- */
+
 
 class NotificationModel
 {
@@ -18,9 +13,7 @@ class NotificationModel
         $this->pdo = Database::getInstance();
     }
 
-    /**
-     * Envoie (cree) une notification pour un utilisateur
-     */
+    
     public function envoyer(int $idUtilisateur, string $contenu): int
     {
         $stmt = $this->pdo->prepare(
@@ -37,9 +30,7 @@ class NotificationModel
         return $stmt->fetchColumn();
     }
 
-    /**
-     * Liste toutes les notifications d'un utilisateur (les plus recentes d'abord)
-     */
+    
     public function getParUtilisateur(int $idUtilisateur): array
     {
         $stmt = $this->pdo->prepare(
@@ -53,9 +44,7 @@ class NotificationModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Compte les notifications non lues (pour affichage badge dans navbar)
-     */
+    
     public function compterNonLues(int $idUtilisateur): int
     {
         $stmt = $this->pdo->prepare(
@@ -67,9 +56,7 @@ class NotificationModel
         return (int) $stmt->fetchColumn();
     }
 
-    /**
-     * Marque une notification precise comme lue
-     */
+    
     public function marquerCommeLue(int $idNotification, int $idUtilisateur): bool
     {
         $stmt = $this->pdo->prepare(
@@ -81,9 +68,7 @@ class NotificationModel
         return $stmt->rowCount() > 0;
     }
 
-    /**
-     * Marque toutes les notifications d'un utilisateur comme lues
-     */
+   
     public function marquerToutesCommeLues(int $idUtilisateur): void
     {
         $stmt = $this->pdo->prepare(

@@ -5,13 +5,6 @@ require_once __DIR__ . '/../models/MedecinModel.php';
 require_once __DIR__ . '/../models/SpecialiteModel.php';
 require_once __DIR__ . '/../models/UtilisateurModel.php';
 
-/**
- * AuthController
- * --------------
- * Gere la connexion, l'inscription et la deconnexion.
- * Utilise session PHP pour maintenir l'utilisateur connecte.
- */
-
 class AuthController
 {
     private UtilisateurModel $utilisateurModel;
@@ -31,17 +24,11 @@ class AuthController
         $this->specialiteModel = new SpecialiteModel();
     }
 
-    /**
-     * Affiche le formulaire de connexion
-     */
     public function afficherConnexion(): void
     {
         require __DIR__ . '/../views/auth/connexion.php';
     }
 
-    /**
-     * Traite la soumission du formulaire de connexion
-     */
     public function seConnecter(): void
     {
         $email = trim($_POST['email'] ?? '');
@@ -61,13 +48,11 @@ class AuthController
             return;
         }
 
-        // Stocke les infos essentielles en session
         $_SESSION['id_utilisateur'] = $utilisateur['id_utilisateur'];
         $_SESSION['nom']            = $utilisateur['nom'];
         $_SESSION['prenom']         = $utilisateur['prenom'];
         $_SESSION['role']           = $utilisateur['role'];
 
-        // Redirection selon le role
         switch ($utilisateur['role']) {
             case 'patient':
                 header('Location: /patient/tableau-bord');
@@ -84,20 +69,15 @@ class AuthController
         exit;
     }
 
-    /**
-     * Affiche le formulaire d'inscription patient
-     */
     public function afficherInscriptionPatient(): void
     {
         require __DIR__ . '/../views/auth/inscription_patient.php';
     }
 
-    /**
-     * Traite l'inscription d'un patient
-     */
+   
     public function inscrirePatient(): void
     {
-        $donnees = [
+        $données = [
             'nom'                  => trim($_POST['nom'] ?? ''),
             'prenom'               => trim($_POST['prenom'] ?? ''),
             'email'                => trim($_POST['email'] ?? ''),
@@ -110,35 +90,30 @@ class AuthController
             'antecedents_medicaux' => trim($_POST['antecedents_medicaux'] ?? ''),
         ];
 
-        // Validation minimale
-        if ($donnees['nom'] === '' || $donnees['prenom'] === '' ||
-            $donnees['email'] === '' || $donnees['mot_de_passe'] === '') {
+        if ($données['nom'] === '' || $données['prenom'] === '' ||
+            $données['email'] === '' || $données['mot_de_passe'] === '') {
             $erreur = "Veuillez remplir tous les champs obligatoires.";
             require __DIR__ . '/../views/auth/inscription_patient.php';
             return;
         }
 
-        if ($this->utilisateurModel->emailExiste($donnees['email'])) {
+        if ($this->utilisateurModel->emailExiste($données['email'])) {
             $erreur = "Cet email est deja utilise.";
             require __DIR__ . '/../views/auth/inscription_patient.php';
             return;
         }
 
-        $idUtilisateur = $this->patientModel->inscrire($donnees);
+        $idUtilisateur = $this->patientModel->inscrire($données);
 
-        // Connexion automatique apres inscription
         $_SESSION['id_utilisateur'] = $idUtilisateur;
-        $_SESSION['nom']            = $donnees['nom'];
-        $_SESSION['prenom']         = $donnees['prenom'];
+        $_SESSION['nom']            = $données['nom'];
+        $_SESSION['prenom']         = $données['prenom'];
         $_SESSION['role']           = 'patient';
 
         header('Location: /patient/tableau-bord');
         exit;
     }
 
-    /**
-     * Affiche le formulaire d'inscription medecin
-     */
     public function afficherInscriptionMedecin(): void
     {
         $specialites = $this->specialiteModel->getToutes();
@@ -146,13 +121,9 @@ class AuthController
         require __DIR__ . '/../views/auth/inscriptionMedecin.php';
     }
 
-    /**
-     * Traite l'inscription d'un medecin (statut 'en_attente' par defaut,
-     * doit etre valide par un administrateur avant de recevoir des RDV)
-     */
     public function inscrireMedecin(): void
     {
-        $donnees = [
+        $données = [
             'nom'            => trim($_POST['nom'] ?? ''),
             'prenom'         => trim($_POST['prenom'] ?? ''),
             'email'          => trim($_POST['email'] ?? ''),
@@ -165,31 +136,26 @@ class AuthController
 
         $specialites = $this->specialiteModel->getToutes();
 
-        if ($donnees['nom'] === '' || $donnees['prenom'] === '' ||
-            $donnees['email'] === '' || $donnees['mot_de_passe'] === '' ||
-            $donnees['numero_licence'] === '') {
+        if ($données['nom'] === '' || $données['prenom'] === '' ||
+            $données['email'] === '' || $données['mot_de_passe'] === '' ||
+            $données['numero_licence'] === '') {
             $erreur = "Veuillez remplir tous les champs obligatoires.";
             require __DIR__ . '/../views/auth/inscriptionMedecin.php';
             return;
         }
 
-        if ($this->utilisateurModel->emailExiste($donnees['email'])) {
+        if ($this->utilisateurModel->emailExiste($données['email'])) {
             $erreur = "Cet email est deja utilise.";
             require __DIR__ . '/../views/auth/inscriptionMedecin.php';
             return;
         }
 
-        $this->medecinModel->inscrire($donnees);
-
-        // Pas de connexion automatique : le compte doit d'abord etre valide
-        // par un administrateur avant de pouvoir se connecter utilement
-        $messageSucces = "Votre inscription a bien ete enregistree. Votre compte doit etre valide par un administrateur avant que vous puissiez recevoir des rendez-vous.";
+        $this->medecinModel->inscrire($données);
+        $messageSucces = "Votre inscription a bien été enregistrée. Votre compte doit être validé par un administrateur avant que vous puissiez recevoir des rendez-vous.";
         require __DIR__ . '/../views/auth/connexion.php';
     }
 
-    /**
-     * Deconnecte l'utilisateur (detruit la session)
-     */
+    
     public function seDeconnecter(): void
     {
         $_SESSION = [];

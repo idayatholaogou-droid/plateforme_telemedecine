@@ -3,16 +3,6 @@
 require_once __DIR__ . '/UtilisateurModel.php';
 require_once __DIR__ . '/MedecinModel.php';
 
-/**
- * AdministrateurModel
- * -------------------
- * Herite de UtilisateurModel (seConnecter, emailExiste, modifierProfil...)
- * et ajoute les operations propres a l'administrateur :
- * inscription, validation/rejet des medecins, gestion des utilisateurs.
- *
- * La table "administrateur" n'a pas d'attributs propres : elle sert
- * uniquement a marquer qu'un utilisateur (id_utilisateur) a le role admin.
- */
 
 class AdministrateurModel extends UtilisateurModel
 {
@@ -21,15 +11,11 @@ class AdministrateurModel extends UtilisateurModel
         parent::__construct();
     }
 
-    /**
-     * Inscrit un nouvel administrateur (2 tables : utilisateur + administrateur)
-     */
     public function inscrire(array $donnees): int
     {
         try {
             $this->pdo->beginTransaction();
 
-            // 1. Insertion dans la table mere "utilisateur"
             $stmtUser = $this->pdo->prepare(
                 "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role)
                  VALUES (:nom, :prenom, :email, :mot_de_passe, 'admin')
@@ -45,7 +31,6 @@ class AdministrateurModel extends UtilisateurModel
 
             $idUtilisateur = $stmtUser->fetchColumn();
 
-            // 2. Insertion dans la table fille "administrateur" (juste l'id)
             $stmtAdmin = $this->pdo->prepare(
                 "INSERT INTO administrateur (id_utilisateur) VALUES (:id_utilisateur)"
             );
@@ -60,9 +45,6 @@ class AdministrateurModel extends UtilisateurModel
         }
     }
 
-    /**
-     * Recupere un administrateur (jointure utilisateur + administrateur)
-     */
     public function trouverParId(int $idUtilisateur): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -76,27 +58,18 @@ class AdministrateurModel extends UtilisateurModel
         return $stmt->fetch();
     }
 
-    /**
-     * Valide le compte d'un medecin
-     */
     public function validerMedecin(int $idMedecin): bool
     {
         $medecinModel = new MedecinModel();
         return $medecinModel->valider($idMedecin);
     }
 
-    /**
-     * Rejette le compte d'un medecin
-     */
     public function rejeterMedecin(int $idMedecin): bool
     {
         $medecinModel = new MedecinModel();
         return $medecinModel->rejeter($idMedecin);
     }
 
-    /**
-     * Liste tous les utilisateurs (tous roles confondus)
-     */
     public function getTousUtilisateurs(): array
     {
         $stmt = $this->pdo->query(
@@ -108,11 +81,6 @@ class AdministrateurModel extends UtilisateurModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Supprime un compte utilisateur (patient, medecin ou admin)
-     * Le ON DELETE CASCADE sur les tables filles s'occupe de la suppression
-     * en cascade dans patient/medecin/administrateur
-     */
     public function supprimerUtilisateur(int $idUtilisateur): bool
     {
         $stmt = $this->pdo->prepare(
@@ -122,9 +90,6 @@ class AdministrateurModel extends UtilisateurModel
         return $stmt->execute(['id' => $idUtilisateur]);
     }
 
-    /**
-     * Quelques statistiques globales pour le tableau de bord admin
-     */
     public function getStatistiques(): array
     {
         $stmt = $this->pdo->query(

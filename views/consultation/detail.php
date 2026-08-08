@@ -9,7 +9,7 @@
     </div>
 
     <div class="consultation-details">
-        <h3>Symptomes</h3>
+        <h3>Symptômes</h3>
         <p><?= nl2br(htmlspecialchars($consultation['symptomes'])) ?></p>
 
         <h3>Diagnostic</h3>
@@ -23,7 +23,7 @@
 
     <?php if ($_SESSION['role'] === 'medecin'): ?>
         <a href="/ordonnance/creer?consultation=<?= $consultation['id_consultation'] ?>" class="btn btn-primary">
-            Rediger une ordonnance
+            Rédiger une ordonnance
         </a>
     <?php endif; ?>
 </div>

@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Telemedecine - Plateforme simplifiee</title>
+    <title>Télémédecine - Plateforme simplifiée</title>
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
 
 <header class="site-header">
     <a href="/" class="logo">
-        <img src="/assets/images/logo.svg" alt="Logo Telemedecine" width="32" height="32">
+        <img src="public/assets/images/logo.webp" alt="Logo Telemedecine" width="32" height="32">
         Telemedecine
     </a>
     <nav>

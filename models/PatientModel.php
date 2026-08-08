@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/UtilisateurModel.php';
 
-/**
+
  * PatientModel
  * ------------
  * Herite de UtilisateurModel (seConnecter, emailExiste, modifierProfil...)
@@ -13,18 +13,14 @@ class PatientModel extends UtilisateurModel
 {
     public function __construct()
     {
-        parent::__construct(); // initialise $this->pdo via UtilisateurModel
+        parent::__construct(); 
     }
 
-    /**
-     * Inscrit un nouveau patient (2 tables : utilisateur + patient)
-     */
     public function inscrire(array $donnees): int
     {
         try {
             $this->pdo->beginTransaction();
 
-            // 1. Insertion dans la table mere "utilisateur"
             $stmtUser = $this->pdo->prepare(
                 "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role)
                  VALUES (:nom, :prenom, :email, :mot_de_passe, 'patient')
@@ -40,8 +36,7 @@ class PatientModel extends UtilisateurModel
 
             $idUtilisateur = $stmtUser->fetchColumn();
 
-            // 2. Insertion dans la table fille "patient" avec le meme id
-            //    (telephone et date_inscription sont propres a patient)
+            
             $stmtPatient = $this->pdo->prepare(
                 "INSERT INTO patient (id_utilisateur, telephone, date_naissance, sexe, adresse, groupe_sanguin, antecedents_medicaux)
                  VALUES (:id_utilisateur, :telephone, :date_naissance, :sexe, :adresse, :groupe_sanguin, :antecedents)"
@@ -61,15 +56,13 @@ class PatientModel extends UtilisateurModel
 
             return $idUtilisateur;
         } catch (PDOException $e) {
-            // Annule les deux insertions si l'une des deux echoue
+           
             $this->pdo->rollBack();
             throw $e;
         }
     }
 
-    /**
-     * Recupere un patient complet (jointure utilisateur + patient)
-     */
+    
     public function trouverParId(int $idUtilisateur): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -85,9 +78,7 @@ class PatientModel extends UtilisateurModel
         return $stmt->fetch();
     }
 
-    /**
-     * Liste tous les patients
-     */
+    
     public function getAll(): array
     {
         $stmt = $this->pdo->query(

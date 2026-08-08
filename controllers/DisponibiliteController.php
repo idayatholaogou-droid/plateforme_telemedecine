@@ -2,13 +2,6 @@
 
 require_once __DIR__ . '/../models/DisponibiliteModel.php';
 
-/**
- * DisponibiliteController
- * --------------------------
- * Gere l'ajout et la suppression des creneaux de disponibilite
- * d'un medecin. Reserve au role 'medecin'.
- */
-
 class DisponibiliteController
 {
     private DisponibiliteModel $disponibiliteModel;
@@ -24,9 +17,6 @@ class DisponibiliteController
         $this->verifierAcces();
     }
 
-    /**
-     * Seul un medecin connecte peut gerer ses disponibilites
-     */
     private function verifierAcces(): void
     {
         if (empty($_SESSION['id_utilisateur']) || $_SESSION['role'] !== 'medecin') {
@@ -35,9 +25,6 @@ class DisponibiliteController
         }
     }
 
-    /**
-     * Affiche la liste des creneaux du medecin connecte (avec formulaire d'ajout)
-     */
     public function afficherListe(): void
     {
         $idMedecin = $_SESSION['id_utilisateur'];
@@ -46,9 +33,6 @@ class DisponibiliteController
         require __DIR__ . '/../views/medecin/disponibilites.php';
     }
 
-    /**
-     * Traite l'ajout d'un nouveau creneau
-     */
     public function ajouter(): void
     {
         $idMedecin = $_SESSION['id_utilisateur'];
@@ -72,9 +56,6 @@ class DisponibiliteController
         exit;
     }
 
-    /**
-     * Traite la suppression d'un creneau (uniquement s'il est encore libre)
-     */
     public function supprimer(): void
     {
         $idMedecin = $_SESSION['id_utilisateur'];

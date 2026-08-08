@@ -2,13 +2,7 @@
 
 require_once __DIR__ . '/UtilisateurModel.php';
 
-/**
- * MedecinModel
- * ------------
- * Herite de UtilisateurModel (seConnecter, emailExiste, modifierProfil...)
- * et ajoute les operations propres au medecin :
- * inscription, validation par l'admin, gestion des specialites.
- */
+
 
 class MedecinModel extends UtilisateurModel
 {
@@ -17,16 +11,13 @@ class MedecinModel extends UtilisateurModel
         parent::__construct();
     }
 
-    /**
-     * Inscrit un nouveau medecin (2 tables : utilisateur + medecin)
-     * Statut par defaut : 'en_attente' (doit etre valide par un admin)
-     */
+    
     public function inscrire(array $donnees): int
     {
         try {
             $this->pdo->beginTransaction();
 
-            // 1. Insertion dans la table mere "utilisateur"
+            
             $stmtUser = $this->pdo->prepare(
                 "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role)
                  VALUES (:nom, :prenom, :email, :mot_de_passe, 'medecin')
@@ -42,7 +33,7 @@ class MedecinModel extends UtilisateurModel
 
             $idUtilisateur = $stmtUser->fetchColumn();
 
-            // 2. Insertion dans la table fille "medecin"
+         
             $stmtMedecin = $this->pdo->prepare(
                 "INSERT INTO medecin (id_utilisateur, telephone, numero_licence, biographie, statut)
                  VALUES (:id_utilisateur, :telephone, :numero_licence, :biographie, 'en_attente')"
@@ -55,7 +46,7 @@ class MedecinModel extends UtilisateurModel
                 'biographie'     => $donnees['biographie'] ?? null,
             ]);
 
-            // 3. Association des specialites (table pivot medecin_specialite)
+           
             if (!empty($donnees['specialites']) && is_array($donnees['specialites'])) {
                 $stmtSpe = $this->pdo->prepare(
                     "INSERT INTO medecin_specialite (id_medecin, id_specialite)
@@ -78,9 +69,8 @@ class MedecinModel extends UtilisateurModel
         }
     }
 
-    /**
-     * Recupere un medecin complet (jointure utilisateur + medecin)
-     */
+    
+    
     public function trouverParId(int $idUtilisateur): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -95,9 +85,7 @@ class MedecinModel extends UtilisateurModel
         return $stmt->fetch();
     }
 
-    /**
-     * Liste tous les medecins valides (visibles publiquement pour les patients)
-     */
+    
     public function getMedecinsValides(): array
     {
         $stmt = $this->pdo->query(
@@ -111,9 +99,7 @@ class MedecinModel extends UtilisateurModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Liste les medecins en attente de validation (pour l'admin)
-     */
+    
     public function getMedecinsEnAttente(): array
     {
         $stmt = $this->pdo->query(
@@ -127,9 +113,7 @@ class MedecinModel extends UtilisateurModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Recherche des medecins par specialite
-     */
+    
     public function rechercherParSpecialite(int $idSpecialite): array
     {
         $stmt = $this->pdo->prepare(
@@ -145,9 +129,7 @@ class MedecinModel extends UtilisateurModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Valide le compte d'un medecin (action reservee a l'administrateur)
-     */
+   
     public function valider(int $idMedecin): bool
     {
         $stmt = $this->pdo->prepare(
@@ -157,9 +139,7 @@ class MedecinModel extends UtilisateurModel
         return $stmt->execute(['id' => $idMedecin]);
     }
 
-    /**
-     * Rejette le compte d'un medecin (action reservee a l'administrateur)
-     */
+    
     public function rejeter(int $idMedecin): bool
     {
         $stmt = $this->pdo->prepare(
@@ -169,9 +149,7 @@ class MedecinModel extends UtilisateurModel
         return $stmt->execute(['id' => $idMedecin]);
     }
 
-    /**
-     * Met a jour les infos specifiques au medecin (telephone, biographie)
-     */
+    
     public function modifierInfosMedecin(int $idMedecin, string $telephone, string $biographie): bool
     {
         $stmt = $this->pdo->prepare(

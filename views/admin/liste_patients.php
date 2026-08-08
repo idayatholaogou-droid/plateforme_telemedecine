@@ -4,7 +4,7 @@
     <h1>Liste des patients</h1>
 
     <?php if (empty($patients)): ?>
-        <p>Aucun patient enregistre.</p>
+        <p>Aucun patient enregistré.</p>
     <?php else: ?>
         <table class="table-admin">
             <thead>

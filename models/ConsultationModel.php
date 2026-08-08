@@ -2,13 +2,6 @@
 
 require_once __DIR__ . '/../config/Database.php';
 
-/**
- * ConsultationModel
- * -------------------
- * Gere la creation et la consultation des comptes-rendus medicaux,
- * lies a un rendez-vous.
- */
-
 class ConsultationModel
 {
     private PDO $pdo;
@@ -18,10 +11,6 @@ class ConsultationModel
         $this->pdo = Database::getInstance();
     }
 
-    /**
-     * Cree une consultation pour un rendez-vous donne
-     * (le rendez-vous doit etre 'confirme' au prealable)
-     */
     public function creer(int $idRdv, string $symptomes, string $diagnostic, string $notes = ''): int|false
     {
         $stmt = $this->pdo->prepare(
@@ -40,9 +29,6 @@ class ConsultationModel
         return $stmt->fetchColumn();
     }
 
-    /**
-     * Recupere une consultation par son id, avec infos patient/medecin/rdv
-     */
     public function trouverParId(int $idConsultation): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -61,9 +47,6 @@ class ConsultationModel
         return $stmt->fetch();
     }
 
-    /**
-     * Recupere la consultation liee a un rendez-vous precis (0 ou 1 resultat)
-     */
     public function trouverParRdv(int $idRdv): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -74,9 +57,6 @@ class ConsultationModel
         return $stmt->fetch();
     }
 
-    /**
-     * Historique complet des consultations d'un patient (le plus recent d'abord)
-     */
     public function getHistoriqueParPatient(int $idPatient): array
     {
         $stmt = $this->pdo->prepare(
@@ -93,9 +73,7 @@ class ConsultationModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Ajoute une note complementaire a une consultation existante
-     */
+    
     public function ajouterNotes(int $idConsultation, string $notes): bool
     {
         $stmt = $this->pdo->prepare(

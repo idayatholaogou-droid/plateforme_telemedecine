@@ -4,12 +4,6 @@ require_once __DIR__ . '/../models/ConversationModel.php';
 require_once __DIR__ . '/../models/MessageModel.php';
 require_once __DIR__ . '/../models/RendezVousModel.php';
 
-/**
- * MessageController
- * --------------------
- * Gere l'affichage d'une conversation et l'envoi de messages,
- * liee a un rendez-vous entre un patient et un medecin.
- */
 
 class MessageController
 {
@@ -33,9 +27,7 @@ class MessageController
         }
     }
 
-    /**
-     * Verifie que l'utilisateur connecté fait bien partie de cette conversation
-     */
+    
     private function verifierParticipant(array $conversation): bool
     {
         $idUtilisateur = $_SESSION['id_utilisateur'];
@@ -43,10 +35,6 @@ class MessageController
             || (int) $conversation['id_medecin'] === $idUtilisateur;
     }
 
-    /**
-     * Affiche (ou cree si besoin) la conversation liee a un rendez-vous,
-     * puis marque les messages recus comme lus
-     */
     public function afficherConversation(): void
     {
         $idRdv = (int) ($_GET['rdv'] ?? 0);
@@ -74,9 +62,7 @@ class MessageController
         require __DIR__ . '/../views/message/conversation.php';
     }
 
-    /**
-     * Traite l'envoi d'un nouveau message
-     */
+    
     public function envoyer(): void
     {
         $idConversation = (int) ($_POST['id_conversation'] ?? 0);
@@ -98,9 +84,7 @@ class MessageController
         exit;
     }
 
-    /**
-     * Liste toutes les conversations de l'utilisateur connecte
-     */
+    
     public function listeConversations(): void
     {
         $conversations = $this->conversationModel->getParUtilisateur(

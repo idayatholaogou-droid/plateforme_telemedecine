@@ -10,11 +10,11 @@
         </div>
         <div class="stat-card">
             <span class="stat-nombre"><?= (int) $statistiques['nb_medecins_valides'] ?></span>
-            <span class="stat-label">Medecins valides</span>
+            <span class="stat-label">Médecins validés</span>
         </div>
         <div class="stat-card stat-alerte">
             <span class="stat-nombre"><?= (int) $statistiques['nb_medecins_en_attente'] ?></span>
-            <span class="stat-label">Medecins en attente</span>
+            <span class="stat-label">Médecins en attente</span>
         </div>
         <div class="stat-card">
             <span class="stat-nombre"><?= (int) $statistiques['nb_rendez_vous'] ?></span>
@@ -28,12 +28,12 @@
 
     <section class="admin-section">
         <div class="section-header">
-            <h2>Medecins en attente de validation</h2>
+            <h2>Médecins en attente de validation</h2>
             <a href="/admin/medecins-en-attente" class="lien-voir-tout">Voir tout</a>
         </div>
 
         <?php if (empty($medecinsEnAttente)): ?>
-            <p>Aucun medecin en attente pour le moment.</p>
+            <p>Aucun médecin en attente pour le moment.</p>
         <?php else: ?>
             <table class="table-admin">
                 <thead>

@@ -13,7 +13,7 @@
             </div>
 
             <div class="form-group">
-                <label for="prenom">Prenom</label>
+                <label for="prenom">Prénom</label>
                 <input type="text" id="prenom" name="prenom" required
                        value="<?= htmlspecialchars($medecin['prenom']) ?>">
             </div>
@@ -22,12 +22,12 @@
         <div class="form-group">
             <label>Email</label>
             <input type="email" value="<?= htmlspecialchars($medecin['email']) ?>" disabled>
-            <small>L'email ne peut pas etre modifie.</small>
+            <small>L'email ne peut pas être modifié.</small>
         </div>
 
         <div class="form-row">
             <div class="form-group">
-                <label for="telephone">Telephone</label>
+                <label for="telephone">Téléphone</label>
                 <input type="tel" id="telephone" name="telephone"
                        value="<?= htmlspecialchars($medecin['telephone'] ?? '') ?>">
             </div>

@@ -2,12 +2,6 @@
 
 require_once __DIR__ . '/../models/NotificationModel.php';
 
-/**
- * NotificationController
- * -------------------------
- * Affiche et gere les notifications de l'utilisateur connecte
- * (patient, medecin ou admin).
- */
 
 class NotificationController
 {
@@ -27,9 +21,6 @@ class NotificationController
         }
     }
 
-    /**
-     * Affiche la liste des notifications, et les marque toutes comme lues
-     */
     public function afficherListe(): void
     {
         $idUtilisateur = $_SESSION['id_utilisateur'];
@@ -41,9 +32,7 @@ class NotificationController
         require __DIR__ . '/../views/notification/liste.php';
     }
 
-    /**
-     * Marque une notification precise comme lue (ex: clic individuel, AJAX)
-     */
+    
     public function marquerLue(): void
     {
         $idNotification = (int) ($_POST['id_notification'] ?? 0);

@@ -2,12 +2,7 @@
 
 require_once __DIR__ . '/../config/Database.php';
 
-/**
- * ConversationModel
- * -------------------
- * Une conversation est liee a un rendez-vous (1:1), et regroupe les
- * messages echanges entre le patient et le medecin concernes.
- */
+
 
 class ConversationModel
 {
@@ -18,9 +13,7 @@ class ConversationModel
         $this->pdo = Database::getInstance();
     }
 
-    /**
-     * Cree une conversation pour un rendez-vous (si elle n'existe pas deja)
-     */
+    
     public function creerPourRdv(int $idRdv): int
     {
         $existante = $this->trouverParRdv($idRdv);
@@ -38,9 +31,7 @@ class ConversationModel
         return $stmt->fetchColumn();
     }
 
-    /**
-     * Recupere la conversation liee a un rendez-vous
-     */
+    
     public function trouverParRdv(int $idRdv): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -53,9 +44,7 @@ class ConversationModel
         return $stmt->fetch();
     }
 
-    /**
-     * Recupere une conversation par son id, avec les infos du rdv/patient/medecin
-     */
+    
     public function trouverParId(int $idConversation): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -73,9 +62,7 @@ class ConversationModel
         return $stmt->fetch();
     }
 
-    /**
-     * Liste les conversations d'un utilisateur (patient ou medecin)
-     */
+   
     public function getParUtilisateur(int $idUtilisateur, string $role): array
     {
         $colonne = $role === 'patient' ? 'rv.id_patient' : 'rv.id_medecin';

@@ -10,11 +10,11 @@
         </div>
         <div class="stat-card">
             <span class="stat-nombre"><?= (int) $statistiques['nb_medecins_valides'] ?></span>
-            <span class="stat-label">Medecins valides</span>
+            <span class="stat-label">Médecins validés</span>
         </div>
         <div class="stat-card stat-alerte">
             <span class="stat-nombre"><?= (int) $statistiques['nb_medecins_en_attente'] ?></span>
-            <span class="stat-label">Medecins en attente</span>
+            <span class="stat-label">Médecins en attente</span>
         </div>
         <div class="stat-card">
             <span class="stat-nombre"><?= (int) $statistiques['nb_rendez_vous'] ?></span>
@@ -22,7 +22,7 @@
         </div>
         <div class="stat-card">
             <span class="stat-nombre"><?= (int) $statistiques['nb_consultations'] ?></span>
-            <span class="stat-label">Consultations realisees</span>
+            <span class="stat-label">Consultations réalisées</span>
         </div>
     </div>
 
@@ -39,7 +39,7 @@
             </strong>
         </p>
         <p>
-            Total des utilisateurs medecins (valides + en attente) :
+            Total des utilisateurs médecins (validés + en attente) :
             <strong><?= (int) $statistiques['nb_medecins_valides'] + (int) $statistiques['nb_medecins_en_attente'] ?></strong>
         </p>
     </div>

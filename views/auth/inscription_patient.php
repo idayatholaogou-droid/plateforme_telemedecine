@@ -85,7 +85,7 @@
         </div>
 
         <div class="form-group">
-            <label for="antecedents_medicaux">Antecedents medicaux</label>
+            <label for="antecedents_medicaux">Antécédents médicaux</label>
             <textarea id="antecedents_medicaux" name="antecedents_medicaux" rows="3"><?= htmlspecialchars($_POST['antecedents_medicaux'] ?? '') ?></textarea>
         </div>
 

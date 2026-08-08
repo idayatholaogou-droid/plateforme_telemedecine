@@ -3,12 +3,6 @@
 require_once __DIR__ . '/../models/OrdonnanceModel.php';
 require_once __DIR__ . '/../models/ConsultationModel.php';
 
-/**
- * OrdonnanceController
- * ----------------------
- * Gere la redaction d'ordonnances par le medecin, a partir d'une
- * consultation existante, et leur consultation par le patient concerne.
- */
 
 class OrdonnanceController
 {
@@ -30,9 +24,7 @@ class OrdonnanceController
         }
     }
 
-    /**
-     * Affiche le formulaire de redaction d'ordonnance (medecin uniquement)
-     */
+    
     public function afficherCreer(): void
     {
         if ($_SESSION['role'] !== 'medecin') {
@@ -53,9 +45,7 @@ class OrdonnanceController
         require __DIR__ . '/../views/ordonnance/creer.php';
     }
 
-    /**
-     * Traite la creation de l'ordonnance avec ses lignes de medicaments
-     */
+    
     public function creer(): void
     {
         if ($_SESSION['role'] !== 'medecin') {
@@ -73,8 +63,7 @@ class OrdonnanceController
             return;
         }
 
-        // Les champs du formulaire arrivent sous forme de tableaux paralleles
-        // nom_medicament[], posologie[], duree[], quantite[]
+        
         $noms = $_POST['nom_medicament'] ?? [];
         $posologies = $_POST['posologie'] ?? [];
         $durees = $_POST['duree'] ?? [];
@@ -84,7 +73,7 @@ class OrdonnanceController
         foreach ($noms as $i => $nom) {
             $nom = trim($nom);
             if ($nom === '') {
-                continue; // ignore les lignes vides
+                continue; 
             }
             $medicaments[] = [
                 'nom'       => $nom,
@@ -106,9 +95,7 @@ class OrdonnanceController
         exit;
     }
 
-    /**
-     * Affiche le detail d'une ordonnance (patient ou medecin concerne uniquement)
-     */
+    
     public function detail(): void
     {
         $idOrdonnance = (int) ($_GET['id'] ?? 0);

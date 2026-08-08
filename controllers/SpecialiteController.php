@@ -2,12 +2,6 @@
 
 require_once __DIR__ . '/../models/SpecialiteModel.php';
 
-/**
- * SpecialiteController
- * -----------------------
- * CRUD des specialites medicales, reserve a l'administrateur.
- */
-
 class SpecialiteController
 {
     private SpecialiteModel $specialiteModel;
@@ -23,9 +17,6 @@ class SpecialiteController
         $this->verifierAcces();
     }
 
-    /**
-     * Seul l'administrateur peut gerer les specialites
-     */
     private function verifierAcces(): void
     {
         if (empty($_SESSION['id_utilisateur']) || $_SESSION['role'] !== 'admin') {
@@ -34,9 +25,6 @@ class SpecialiteController
         }
     }
 
-    /**
-     * Affiche la liste des specialites (avec formulaire d'ajout)
-     */
     public function afficherListe(): void
     {
         $specialites = $this->specialiteModel->getToutes();
@@ -44,9 +32,6 @@ class SpecialiteController
         require __DIR__ . '/../views/admin/specialites.php';
     }
 
-    /**
-     * Traite l'ajout d'une nouvelle specialite
-     */
     public function ajouter(): void
     {
         $libelle = trim($_POST['libelle'] ?? '');
@@ -60,9 +45,6 @@ class SpecialiteController
         exit;
     }
 
-    /**
-     * Traite la modification d'une specialite
-     */
     public function modifier(): void
     {
         $idSpecialite = (int) ($_POST['id_specialite'] ?? 0);
@@ -77,9 +59,6 @@ class SpecialiteController
         exit;
     }
 
-    /**
-     * Traite la suppression d'une specialite
-     */
     public function supprimer(): void
     {
         $idSpecialite = (int) ($_POST['id_specialite'] ?? 0);

@@ -2,14 +2,7 @@
 
 require_once __DIR__ . '/../config/Database.php';
 
-/**
- * HistoriqueMedicalModel
- * -------------------------
- * Gere les evenements de l'historique medical d'un patient
- * (allergies, maladies chroniques, interventions...).
- * Distinct des consultations : ce sont des informations que le patient
- * ou le medecin peuvent ajouter manuellement, hors du cadre d'un RDV precis.
- */
+
 
 class HistoriqueMedicalModel
 {
@@ -20,9 +13,7 @@ class HistoriqueMedicalModel
         $this->pdo = Database::getInstance();
     }
 
-    /**
-     * Ajoute un evenement a l'historique medical d'un patient
-     */
+    
     public function ajouter(int $idPatient, string $typeEvenement, string $contenu): int
     {
         $stmt = $this->pdo->prepare(
@@ -40,9 +31,6 @@ class HistoriqueMedicalModel
         return $stmt->fetchColumn();
     }
 
-    /**
-     * Modifie un evenement existant (verifie que le patient en est proprietaire)
-     */
     public function modifier(int $idHistorique, int $idPatient, string $typeEvenement, string $contenu): bool
     {
         $stmt = $this->pdo->prepare(
@@ -61,9 +49,7 @@ class HistoriqueMedicalModel
         return $stmt->rowCount() > 0;
     }
 
-    /**
-     * Supprime un evenement (verifie que le patient en est proprietaire)
-     */
+    
     public function supprimer(int $idHistorique, int $idPatient): bool
     {
         $stmt = $this->pdo->prepare(
@@ -74,9 +60,7 @@ class HistoriqueMedicalModel
         return $stmt->rowCount() > 0;
     }
 
-    /**
-     * Liste tout l'historique medical d'un patient (le plus recent d'abord)
-     */
+    
     public function getParPatient(int $idPatient): array
     {
         $stmt = $this->pdo->prepare(

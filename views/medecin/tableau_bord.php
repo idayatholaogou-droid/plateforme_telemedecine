@@ -6,14 +6,14 @@
     <?php if ($medecin['statut'] !== 'valide'): ?>
         <div class="alerte alerte-erreur">
             Votre compte est actuellement <strong><?= htmlspecialchars($medecin['statut']) ?></strong>.
-            Vous devez etre valide par un administrateur avant de pouvoir recevoir des rendez-vous.
+            Vous devez être validé par un administrateur avant de pouvoir recevoir des rendez-vous.
         </div>
     <?php endif; ?>
 
     <div class="dashboard-cards">
         <a href="/medecin/disponibilites" class="dashboard-card">
-            <h3>Mes disponibilites</h3>
-            <p>Gerez vos creneaux de consultation.</p>
+            <h3>Mes disponibilités</h3>
+            <p>Gérez vos creneaux de consultation.</p>
         </a>
 
         <a href="/medecin/planning" class="dashboard-card">
@@ -22,8 +22,8 @@
         </a>
 
         <a href="/medecin/consultation" class="dashboard-card">
-            <h3>Consultations a rediger</h3>
-            <p>Rendez-vous confirmes en attente de compte-rendu.</p>
+            <h3>Consultations à rédiger</h3>
+            <p>Rendez-vous confirmés en attente de compte-rendu.</p>
         </a>
 
         <a href="/message/liste" class="dashboard-card">
@@ -33,7 +33,7 @@
 
         <a href="/notification/liste" class="dashboard-card">
             <h3>Notifications</h3>
-            <p>Consultez vos dernieres notifications.</p>
+            <p>Consultez vos dernières notifications.</p>
         </a>
 
         <a href="/medecin/profil" class="dashboard-card">

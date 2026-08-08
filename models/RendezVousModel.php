@@ -3,13 +3,7 @@
 require_once __DIR__ . '/../config/Database.php';
 require_once __DIR__ . '/DisponibiliteModel.php';
 
-/**
- * RendezVousModel
- * -----------------
- * Gere le cycle de vie complet d'un rendez-vous : creation, confirmation,
- * annulation. Travaille en transaction avec DisponibiliteModel puisque
- * prendre un RDV reserve toujours un creneau en meme temps.
- */
+
 
 class RendezVousModel
 {
@@ -22,30 +16,25 @@ class RendezVousModel
         $this->disponibiliteModel = new DisponibiliteModel();
     }
 
-    /**
-     * Cree un rendez-vous : reserve le creneau + insere la ligne rendez_vous
-     * dans une seule transaction (les deux doivent reussir ensemble)
-     */
+    
     public function creer(int $idPatient, int $idMedecin, int $idDispo, string $motif = ''): int|false
     {
         $dispo = $this->disponibiliteModel->trouverParId($idDispo);
 
         if (!$dispo || $dispo['statut'] !== 'libre' || (int) $dispo['id_medecin'] !== $idMedecin) {
-            return false; // creneau invalide, deja pris, ou n'appartient pas a ce medecin
+            return false; 
         }
 
         try {
             $this->pdo->beginTransaction();
 
-            // 1. Marque le creneau comme reserve
             $reserve = $this->disponibiliteModel->marquerReserve($idDispo);
             if (!$reserve) {
-                // Quelqu'un d'autre a reserve entre-temps (cas rare mais possible)
                 $this->pdo->rollBack();
                 return false;
             }
 
-            // 2. Cree le rendez-vous
+         
             $stmt = $this->pdo->prepare(
                 "INSERT INTO rendez_vous (id_patient, id_medecin, id_dispo, date_rdv, motif, statut)
                  VALUES (:id_patient, :id_medecin, :id_dispo, :date_rdv, :motif, 'en_attente')
@@ -70,9 +59,7 @@ class RendezVousModel
         }
     }
 
-    /**
-     * Annule un rendez-vous : libere le creneau + change le statut
-     */
+    
     public function annuler(int $idRdv): bool
     {
         $rdv = $this->trouverParId($idRdv);
@@ -100,9 +87,6 @@ class RendezVousModel
         }
     }
 
-    /**
-     * Confirme un rendez-vous (action du medecin)
-     */
     public function confirmer(int $idRdv, int $idMedecin): bool
     {
         $stmt = $this->pdo->prepare(
@@ -114,9 +98,7 @@ class RendezVousModel
         return $stmt->rowCount() > 0;
     }
 
-    /**
-     * Marque un rendez-vous comme termine (apres la consultation)
-     */
+    
     public function terminer(int $idRdv): bool
     {
         $stmt = $this->pdo->prepare(
@@ -127,9 +109,7 @@ class RendezVousModel
         return $stmt->rowCount() > 0;
     }
 
-    /**
-     * Recupere un rendez-vous par son id
-     */
+    
     public function trouverParId(int $idRdv): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -140,10 +120,7 @@ class RendezVousModel
         return $stmt->fetch();
     }
 
-    /**
-     * Recupere un rendez-vous avec toutes les infos utiles a l'affichage
-     * (nom du patient, nom du medecin, horaires)
-     */
+   
     public function trouverDetailComplet(int $idRdv): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -162,9 +139,7 @@ class RendezVousModel
         return $stmt->fetch();
     }
 
-    /**
-     * Liste les rendez-vous d'un patient (avec infos du medecin)
-     */
+    
     public function getParPatient(int $idPatient): array
     {
         $stmt = $this->pdo->prepare(
@@ -182,9 +157,7 @@ class RendezVousModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Liste les rendez-vous d'un medecin (avec infos du patient) = son planning
-     */
+    
     public function getParMedecin(int $idMedecin): array
     {
         $stmt = $this->pdo->prepare(
@@ -202,10 +175,7 @@ class RendezVousModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Verifie si un medecin a deja eu un rendez-vous avec un patient donne
-     * (utile pour securiser l'acces au dossier patient)
-     */
+   
     public function medecinAAccesPatient(int $idMedecin, int $idPatient): bool
     {
         $stmt = $this->pdo->prepare(

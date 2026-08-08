@@ -3,13 +3,6 @@
 require_once __DIR__ . '/../models/ConsultationModel.php';
 require_once __DIR__ . '/../models/RendezVousModel.php';
 
-/**
- * ConsultationController
- * ------------------------
- * Gere la creation d'une consultation par le medecin (a partir d'un
- * rendez-vous confirme) et sa consultation par le patient ou le medecin.
- */
-
 class ConsultationController
 {
     private ConsultationModel $consultationModel;
@@ -30,9 +23,6 @@ class ConsultationController
         }
     }
 
-    /**
-     * Affiche le formulaire de creation de consultation (medecin uniquement)
-     */
     public function afficherCreer(): void
     {
         if ($_SESSION['role'] !== 'medecin') {
@@ -58,9 +48,6 @@ class ConsultationController
         require __DIR__ . '/../views/consultation/creer.php';
     }
 
-    /**
-     * Traite la creation de la consultation, puis marque le RDV comme termine
-     */
     public function creer(): void
     {
         if ($_SESSION['role'] !== 'medecin') {
@@ -92,10 +79,6 @@ class ConsultationController
         exit;
     }
 
-    /**
-     * Affiche le detail d'une consultation
-     * (accessible au patient concerne et au medecin concerne uniquement)
-     */
     public function detail(): void
     {
         $idConsultation = (int) ($_GET['id'] ?? 0);
@@ -120,9 +103,6 @@ class ConsultationController
         require __DIR__ . '/../views/consultation/detail.php';
     }
 
-    /**
-     * Historique des consultations du patient connecte
-     */
     public function historiquePatient(): void
     {
         if ($_SESSION['role'] !== 'patient') {

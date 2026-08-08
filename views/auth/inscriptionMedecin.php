@@ -1,7 +1,7 @@
 <?php require __DIR__ . '/../partials/header.php'; ?>
 
 <div class="auth-container">
-    <h1>Inscription Medecin</h1>
+    <h1>Inscription Médecin</h1>
 
     <?php if (!empty($erreur)): ?>
         <div class="alerte alerte-erreur">
@@ -53,7 +53,7 @@
         <div class="form-group">
             <label>Specialites</label>
             <?php if (empty($specialites)): ?>
-                <p><em>Aucune specialite disponible pour le moment.</em></p>
+                <p><em>Aucune specialité disponible pour le moment.</em></p>
             <?php else: ?>
                 <div class="checkboxes-specialites">
                     <?php foreach ($specialites as $specialite): ?>
@@ -67,12 +67,12 @@
         </div>
 
         <div class="form-group">
-            <label for="biographie">Biographie / Presentation</label>
+            <label for="biographie">Biographie / Présentation</label>
             <textarea id="biographie" name="biographie" rows="3"><?= htmlspecialchars($_POST['biographie'] ?? '') ?></textarea>
         </div>
 
         <div class="alerte alerte-info">
-            Votre compte devra etre valide par un administrateur avant de pouvoir recevoir des rendez-vous.
+            Votre compte devra être validé par un administrateur avant de pouvoir recevoir des rendez-vous.
         </div>
 
         <button type="submit" class="btn btn-primary">S'inscrire</button>

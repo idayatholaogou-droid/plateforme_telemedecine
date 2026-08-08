@@ -4,7 +4,7 @@
     <h1>Gestion des utilisateurs</h1>
 
     <?php if (empty($utilisateurs)): ?>
-        <p>Aucun utilisateur enregistre.</p>
+        <p>Aucun utilisateur enregistré.</p>
     <?php else: ?>
         <table class="table-admin">
             <thead>

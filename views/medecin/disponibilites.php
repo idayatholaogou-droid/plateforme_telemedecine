@@ -1,13 +1,13 @@
 <?php require __DIR__ . '/../partials/header.php'; ?>
 
 <div class="medecin-container">
-    <h1>Mes disponibilites</h1>
+    <h1>Mes disponibilités</h1>
 
     <?php
         $erreursMessages = [
             'champs_manquants' => "Veuillez remplir tous les champs.",
-            'heure_invalide'   => "L'heure de fin doit etre apres l'heure de debut.",
-            'creneau_reserve'  => "Impossible de supprimer un creneau deja reserve.",
+            'heure_invalide'   => "L'heure de fin doit être après l'heure de début.",
+            'creneau_reserve'  => "Impossible de supprimer un creneau déjà réservé.",
         ];
         $codeErreur = $_GET['erreur'] ?? null;
     ?>

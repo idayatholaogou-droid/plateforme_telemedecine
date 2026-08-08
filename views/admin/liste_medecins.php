@@ -1,10 +1,10 @@
 <?php require __DIR__ . '/../partials/header.php'; ?>
 
 <div class="admin-container">
-    <h1>Medecins en attente de validation</h1>
+    <h1>Médecins en attente de validation</h1>
 
     <?php if (empty($medecinsEnAttente)): ?>
-        <p>Aucun medecin en attente pour le moment.</p>
+        <p>Aucun médecin en attente pour le moment.</p>
     <?php else: ?>
         <table class="table-admin">
             <thead>

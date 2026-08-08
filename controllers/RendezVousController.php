@@ -4,12 +4,7 @@ require_once __DIR__ . '/../models/RendezVousModel.php';
 require_once __DIR__ . '/../models/DisponibiliteModel.php';
 require_once __DIR__ . '/../models/MedecinModel.php';
 
-/**
- * RendezVousController
- * ----------------------
- * Gere la prise, l'annulation, la confirmation et la consultation
- * des rendez-vous, cote patient et cote medecin.
- */
+
 
 class RendezVousController
 {
@@ -30,9 +25,6 @@ class RendezVousController
         $this->verifierConnecte();
     }
 
-    /**
-     * Toutes les actions necessitent d'etre connecte (patient ou medecin)
-     */
     private function verifierConnecte(): void
     {
         if (empty($_SESSION['id_utilisateur'])) {
@@ -41,10 +33,6 @@ class RendezVousController
         }
     }
 
-    /**
-     * Affiche le formulaire de prise de rendez-vous pour un medecin donne
-     * (les creneaux libres sont recuperes via DisponibiliteModel)
-     */
     public function afficherPrendre(): void
     {
         if ($_SESSION['role'] !== 'patient') {
@@ -67,9 +55,6 @@ class RendezVousController
         require __DIR__ . '/../views/rendezVous/prendre.php';
     }
 
-    /**
-     * Traite la creation du rendez-vous (POST)
-     */
     public function prendre(): void
     {
         if ($_SESSION['role'] !== 'patient') {
@@ -86,7 +71,6 @@ class RendezVousController
         $idRdv = $this->rendezVousModel->creer($idPatient, $idMedecin, $idDispo, $motif);
 
         if (!$idRdv) {
-            // Creneau deja pris entre-temps ou invalide
             header('Location: /rendezvous/prendre?medecin=' . $idMedecin . '&erreur=creneau_indisponible');
             exit;
         }
@@ -95,9 +79,6 @@ class RendezVousController
         exit;
     }
 
-    /**
-     * Liste les rendez-vous de l'utilisateur connecte (patient ou medecin)
-     */
     public function liste(): void
     {
         $idUtilisateur = $_SESSION['id_utilisateur'];
@@ -113,9 +94,6 @@ class RendezVousController
         require __DIR__ . '/../views/rendezVous/liste.php';
     }
 
-    /**
-     * Annule un rendez-vous (patient ou medecin)
-     */
     public function annuler(): void
     {
         $idRdv = (int) ($_POST['id_rdv'] ?? 0);
@@ -128,10 +106,6 @@ class RendezVousController
         exit;
     }
 
-    /**
-     * Affiche le detail d'un rendez-vous precis
-     * (accessible au patient et au medecin concernes uniquement)
-     */
     public function detail(): void
     {
         $idRdv = (int) ($_GET['id'] ?? 0);
@@ -156,9 +130,6 @@ class RendezVousController
         require __DIR__ . '/../views/rendezVous/detail.php';
     }
 
-    /**
-     * Confirme un rendez-vous (action reservee au medecin)
-     */
     public function confirmer(): void
     {
         if ($_SESSION['role'] !== 'medecin') {

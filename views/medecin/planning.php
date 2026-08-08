@@ -7,7 +7,6 @@
         <p>Aucun rendez-vous pour le moment.</p>
     <?php else: ?>
         <?php
-            // Regroupe les rendez-vous par date pour un affichage type calendrier
             $parDate = [];
             foreach ($rendezVous as $rdv) {
                 $parDate[$rdv['date_rdv']][] = $rdv;

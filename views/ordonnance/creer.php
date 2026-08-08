@@ -1,7 +1,7 @@
 <?php require __DIR__ . '/../partials/header.php'; ?>
 
 <div class="ordonnance-container">
-    <h1>Rediger une ordonnance</h1>
+    <h1>Rédiger une ordonnance</h1>
 
     <?php if (!empty($erreur)): ?>
         <div class="alerte alerte-erreur"><?= htmlspecialchars($erreur) ?></div>
@@ -19,7 +19,7 @@
             </div>
         </div>
 
-        <button type="button" id="ajouter-ligne" class="btn btn-secondaire">+ Ajouter un medicament</button>
+        <button type="button" id="ajouter-ligne" class="btn btn-secondaire">+ Ajouter un médicament</button>
 
         <br><br>
         <button type="submit" class="btn btn-primary">Enregistrer l'ordonnance</button>
@@ -34,8 +34,8 @@ document.getElementById('ajouter-ligne').addEventListener('click', function () {
     ligne.innerHTML = `
         <input type="text" name="nom_medicament[]" placeholder="Nom du medicament" required>
         <input type="text" name="posologie[]" placeholder="Posologie" required>
-        <input type="number" name="duree[]" placeholder="Duree (jours)" min="1">
-        <input type="number" name="quantite[]" placeholder="Quantite" min="1" value="1">
+        <input type="number" name="durée[]" placeholder="Durée (jours)" min="1">
+        <input type="number" name="quantité[]" placeholder="Quantité" min="1" value="1">
     `;
     conteneur.appendChild(ligne);
 });

@@ -2,11 +2,7 @@
 
 require_once __DIR__ . '/../config/Database.php';
 
-/**
- * DisponibiliteModel
- * -------------------
- * Gere les creneaux de disponibilite des medecins.
- */
+
 
 class DisponibiliteModel
 {
@@ -17,9 +13,7 @@ class DisponibiliteModel
         $this->pdo = Database::getInstance();
     }
 
-    /**
-     * Ajoute un creneau de disponibilite pour un medecin
-     */
+    
     public function ajouterCreneau(int $idMedecin, string $jour, string $heureDebut, string $heureFin): int
     {
         $stmt = $this->pdo->prepare(
@@ -38,9 +32,7 @@ class DisponibiliteModel
         return $stmt->fetchColumn();
     }
 
-    /**
-     * Supprime un creneau (uniquement si encore libre, non reserve)
-     */
+    
     public function supprimerCreneau(int $idDispo, int $idMedecin): bool
     {
         $stmt = $this->pdo->prepare(
@@ -56,9 +48,7 @@ class DisponibiliteModel
         return $stmt->rowCount() > 0;
     }
 
-    /**
-     * Liste tous les creneaux d'un medecin (libres et reserves)
-     */
+    
     public function getCreneauxParMedecin(int $idMedecin): array
     {
         $stmt = $this->pdo->prepare(
@@ -72,9 +62,7 @@ class DisponibiliteModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Liste uniquement les creneaux libres d'un medecin (pour la prise de RDV)
-     */
+    
     public function getCreneauxLibres(int $idMedecin): array
     {
         $stmt = $this->pdo->prepare(
@@ -88,9 +76,7 @@ class DisponibiliteModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Recupere un creneau precis (pour verification avant reservation)
-     */
+    
     public function trouverParId(int $idDispo): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -103,9 +89,7 @@ class DisponibiliteModel
         return $stmt->fetch();
     }
 
-    /**
-     * Marque un creneau comme reserve (appele lors de la creation d'un RDV)
-     */
+   
     public function marquerReserve(int $idDispo): bool
     {
         $stmt = $this->pdo->prepare(
@@ -117,9 +101,7 @@ class DisponibiliteModel
         return $stmt->rowCount() > 0;
     }
 
-    /**
-     * Remet un creneau en 'libre' (appele lors de l'annulation d'un RDV)
-     */
+    
     public function libererCreneau(int $idDispo): bool
     {
         $stmt = $this->pdo->prepare(

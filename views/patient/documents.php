@@ -3,13 +3,6 @@
 require_once __DIR__ . '/../models/DocumentModel.php';
 require_once __DIR__ . '/../models/RendezVousModel.php';
 
-/**
- * DocumentController
- * ---------------------
- * Gere l'upload et le telechargement de documents patient.
- * Les fichiers sont stockes HORS du dossier public/ (dans storage/documents/)
- * pour eviter tout acces direct par URL sans passer par les controles d'acces.
- */
 
 class DocumentController
 {
@@ -39,9 +32,7 @@ class DocumentController
         }
     }
 
-    /**
-     * Liste les documents du patient connecte
-     */
+   
     public function afficherListe(): void
     {
         if ($_SESSION['role'] !== 'patient') {
@@ -55,9 +46,7 @@ class DocumentController
         require __DIR__ . '/../views/patient/documents.php';
     }
 
-    /**
-     * Traite l'upload d'un nouveau document (patient uniquement)
-     */
+   
     public function uploader(): void
     {
         if ($_SESSION['role'] !== 'patient') {
@@ -78,7 +67,7 @@ class DocumentController
 
         $fichier = $_FILES['fichier'];
 
-        // Verification du type MIME reel (pas juste l'extension, plus fiable)
+        
         $finfo = finfo_open(FILEINFO_MIME_TYPE);
         $typeMime = finfo_file($finfo, $fichier['tmp_name']);
         finfo_close($finfo);
@@ -97,7 +86,7 @@ class DocumentController
             return;
         }
 
-        // Nom de fichier unique et securise (jamais le nom original tel quel)
+        
         $extension = pathinfo($fichier['name'], PATHINFO_EXTENSION);
         $nomFichier = uniqid('doc_', true) . '.' . $extension;
         $cheminComplet = self::DOSSIER_STOCKAGE . $nomFichier;
@@ -109,17 +98,14 @@ class DocumentController
             return;
         }
 
-        // On stocke uniquement le nom du fichier en base, pas le chemin complet
+        
         $this->documentModel->ajouter($idPatient, $type, $nomFichier);
 
         header('Location: /patient/documents');
         exit;
     }
 
-    /**
-     * Telecharge un document, apres verification des droits d'acces
-     * (proprietaire du document, ou medecin ayant eu un RDV avec ce patient)
-     */
+   
     public function telecharger(): void
     {
         $idDocument = (int) ($_GET['id'] ?? 0);
@@ -158,9 +144,7 @@ class DocumentController
         exit;
     }
 
-    /**
-     * Supprime un document (proprietaire uniquement)
-     */
+   
     public function supprimer(): void
     {
         $idDocument = (int) ($_POST['id_document'] ?? 0);

@@ -2,13 +2,7 @@
 
 require_once __DIR__ . '/../config/Database.php';
 
-/**
- * MessageModel
- * --------------
- * Gere l'envoi et la lecture des messages au sein d'une conversation.
- * Grace a la table mere "utilisateur", l'expediteur est identifie
- * directement par id_expediteur (patient ou medecin, peu importe).
- */
+
 
 class MessageModel
 {
@@ -19,9 +13,7 @@ class MessageModel
         $this->pdo = Database::getInstance();
     }
 
-    /**
-     * Envoie un message dans une conversation
-     */
+    
     public function envoyer(int $idConversation, int $idExpediteur, string $contenu): int
     {
         $stmt = $this->pdo->prepare(
@@ -39,9 +31,7 @@ class MessageModel
         return $stmt->fetchColumn();
     }
 
-    /**
-     * Recupere tous les messages d'une conversation, tries chronologiquement
-     */
+    
     public function getParConversation(int $idConversation): array
     {
         $stmt = $this->pdo->prepare(
@@ -57,10 +47,7 @@ class MessageModel
         return $stmt->fetchAll();
     }
 
-    /**
-     * Marque tous les messages d'une conversation comme lus,
-     * SAUF ceux envoyes par l'utilisateur courant (pas besoin de marquer ses propres messages)
-     */
+    
     public function marquerCommeLus(int $idConversation, int $idUtilisateurCourant): void
     {
         $stmt = $this->pdo->prepare(
@@ -73,14 +60,10 @@ class MessageModel
         ]);
     }
 
-    /**
-     * Compte les messages non lus pour un utilisateur, toutes conversations confondues
-     */
+    
     public function compterNonLus(int $idUtilisateur): int
     {
-        // Chaque occurrence du meme parametre doit avoir un nom distinct,
-        // car PDO_PGSQL (avec emulation desactivee) ne supporte pas la
-        // reutilisation d'un marqueur nomme plusieurs fois.
+        
         $stmt = $this->pdo->prepare(
             "SELECT COUNT(*) FROM message m
              JOIN conversation c ON c.id_conversation = m.id_conversation

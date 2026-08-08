@@ -2,12 +2,7 @@
 
 require_once __DIR__ . '/../config/Database.php';
 
-/**
- * UtilisateurModel
- * ----------------
- * Gere les operations communes a tous les roles (patient, medecin, admin)
- * sur la table mere "utilisateur" : connexion, verification d'email, etc.
- */
+
 
 class UtilisateurModel
 {
@@ -18,9 +13,6 @@ class UtilisateurModel
         $this->pdo = Database::getInstance();
     }
 
-    /**
-     * Verifie si un email existe deja (utile avant une inscription)
-     */
     public function emailExiste(string $email): bool
     {
         $stmt = $this->pdo->prepare(
@@ -31,9 +23,7 @@ class UtilisateurModel
         return (bool) $stmt->fetchColumn();
     }
 
-    /**
-     * Recupere un utilisateur (avec son role) a partir de son email
-     */
+   
     public function trouverParEmail(string $email): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -46,9 +36,7 @@ class UtilisateurModel
         return $stmt->fetch();
     }
 
-    /**
-     * Recupere un utilisateur par son id
-     */
+    
     public function trouverParId(int $idUtilisateur): array|false
     {
         $stmt = $this->pdo->prepare(
@@ -61,11 +49,7 @@ class UtilisateurModel
         return $stmt->fetch();
     }
 
-    /**
-     * Verifie les identifiants de connexion.
-     * Retourne les infos de l'utilisateur (sans le mot de passe) si valides,
-     * sinon false.
-     */
+    
     public function seConnecter(string $email, string $motDePasse): array|false
     {
         $utilisateur = $this->trouverParEmail($email);
@@ -78,15 +62,13 @@ class UtilisateurModel
             return false;
         }
 
-        // On ne renvoie jamais le mot de passe hache au controleur/vue
+      
         unset($utilisateur['mot_de_passe']);
 
         return $utilisateur;
     }
 
-    /**
-     * Change le mot de passe d'un utilisateur (apres verification de l'ancien)
-     */
+    
     public function changerMotDePasse(int $idUtilisateur, string $ancien, string $nouveau): bool
     {
         $stmt = $this->pdo->prepare(
@@ -109,9 +91,7 @@ class UtilisateurModel
         ]);
     }
 
-    /**
-     * Met a jour les infos communes du profil (nom, prenom)
-     */
+   
     public function modifierProfil(int $idUtilisateur, array $donnees): bool
     {
         $stmt = $this->pdo->prepare(

@@ -1,12 +1,12 @@
 <?php require __DIR__ . '/../partials/header.php'; ?>
 
 <div class="admin-container">
-    <h1>Gestion des specialites</h1>
+    <h1>Gestion des specialités</h1>
 
     <form action="/admin/specialites/ajouter" method="POST" class="specialite-form">
         <div class="form-row">
             <div class="form-group">
-                <label for="libelle">Libelle</label>
+                <label for="libelle">Libellé</label>
                 <input type="text" id="libelle" name="libelle" required placeholder="Ex: Cardiologie">
             </div>
             <div class="form-group">
@@ -20,12 +20,12 @@
     <hr>
 
     <?php if (empty($specialites)): ?>
-        <p>Aucune specialite enregistree.</p>
+        <p>Aucune specialité enregistrée.</p>
     <?php else: ?>
         <table class="table-admin">
             <thead>
                 <tr>
-                    <th>Libelle</th>
+                    <th>Libellé</th>
                     <th>Description</th>
                     <th>Actions</th>
                 </tr>
