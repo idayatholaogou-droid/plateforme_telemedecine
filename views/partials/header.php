@@ -10,13 +10,13 @@
 
 <header class="site-header">
     <a href="/" class="logo">
-        <img src="public/assets/images/logo.webp" alt="Logo Telemedecine" width="32" height="32">
+        <img src="/assets/images/logo.webp" alt="Logo Telemedecine" width="32" height="32">
         Telemedecine
     </a>
     <nav>
         <?php if (!empty($_SESSION['id_utilisateur'])): ?>
             <span>Bonjour, <?= htmlspecialchars($_SESSION['prenom']) ?></span>
-            <a href="/deconnexion">Deconnexion</a>
+            <a href="/deconnexion">Déconnexion</a>
         <?php else: ?>
             <a href="/connexion">Connexion</a>
             <a href="/inscription/patient">Inscription</a>

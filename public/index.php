@@ -1,12 +1,5 @@
 <?php
 
-/**
- * index.php - Front Controller
- * -----------------------------
- * Point d'entrée unique de l'application. Toutes les requêtes passent
- * par ici (grace au .htaccess) et sont redirigées vers le bon
- * controleur/methode selon l'URL demandée.
- */
 
 require_once __DIR__ . '/../controllers/AuthController.php';
 require_once __DIR__ . '/../controllers/AdministrateurController.php';
@@ -21,11 +14,9 @@ require_once __DIR__ . '/../controllers/NotificationController.php';
 require_once __DIR__ . '/../controllers/SpecialiteController.php';
 require_once __DIR__ . '/../controllers/DisponibiliteController.php';
 
-// Recupere l'URL demandée, sans les paramètres GET (?...)
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $methode = $_SERVER['REQUEST_METHOD'];
 
-// Table de routage : [methode HTTP, URL] => [Controleur, action]
 $routes = [
     'GET'  => [
         '/'                            => ['AuthController', 'afficherConnexion'],
@@ -44,6 +35,8 @@ $routes = [
         '/medecin/tableau-bord'        => ['MedecinController', 'tableauBord'],
         '/medecin/profil'              => ['MedecinController', 'afficherProfil'],
         '/medecin/dossier-patient'     => ['MedecinController', 'consulterDossierPatient'],
+        '/medecin/planning'            => ['MedecinController', 'planning'],
+        '/medecin/consultation'        => ['MedecinController', 'listeAConsulter'],
         '/rendezvous/prendre'          => ['RendezVousController', 'afficherPrendre'],
         '/rendezvous/liste'            => ['RendezVousController', 'liste'],
         '/rendezvous/detail'           => ['RendezVousController', 'detail'],
@@ -86,14 +79,13 @@ $routes = [
     ],
 ];
 
-// Recherche de la route correspondante
+
 if (isset($routes[$methode][$uri])) {
     [$nomControleur, $action] = $routes[$methode][$uri];
 
     $controleur = new $nomControleur();
     $controleur->$action();
 } else {
-    // Aucune route trouvée : page 404
     http_response_code(404);
     require __DIR__ . '/../views/errors/404.php';
 }

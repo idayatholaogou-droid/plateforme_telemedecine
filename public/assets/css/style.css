@@ -7,7 +7,7 @@
 
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f4f6f8;
+    background-color: #5c7a97;
     color: #1f2937;
     line-height: 1.5;
 }
@@ -23,7 +23,7 @@ a:hover {
 
 
 .site-header {
-    background-color: #ffffff;
+    background-color: #7e4d4d;
     border-bottom: 1px solid #e5e7eb;
     padding: 1rem 2rem;
     display: flex;
@@ -46,7 +46,7 @@ a:hover {
 }
 
 .navbar-role {
-    background-color: #1f2937;
+    background-color: #6180ac;
     padding: 0.75rem 2rem;
     display: flex;
     flex-wrap: wrap;
