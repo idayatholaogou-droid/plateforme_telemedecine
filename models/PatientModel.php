@@ -2,13 +2,6 @@
 
 require_once __DIR__ . '/UtilisateurModel.php';
 
-
- * PatientModel
- * ------------
- * Herite de UtilisateurModel (seConnecter, emailExiste, modifierProfil...)
- * et ajoute les operations propres au patient.
- */
-
 class PatientModel extends UtilisateurModel
 {
     public function __construct()
